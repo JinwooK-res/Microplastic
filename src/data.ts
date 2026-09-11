@@ -8,9 +8,11 @@ import { FoodConfig, FoodKey, UserIntakes } from "./types";
 export const MP_CONCENTRATION: Record<FoodKey, FoodConfig> = {
   salt: {
     name_kr: "소금",
+    name_en: "Salt",
     value: 0.22,
     unit: "p/g",
     description: "천일염, 천연 암염 및 정제 소금에 함유된 미세플라스틱",
+    description_en: "Microplastics found in sea salt, rock salt, and refined table salt",
     defaultVal: 10,
     min: 0,
     max: 100,
@@ -18,9 +20,11 @@ export const MP_CONCENTRATION: Record<FoodKey, FoodConfig> = {
   },
   fish_sauce: {
     name_kr: "액젓",
+    name_en: "Fish Sauce",
     value: 0.60,
     unit: "p/g",
     description: "멸치액젓, 까나리액젓 등 발효 어장류",
+    description_en: "Fermented fish sauces such as anchovy and sand lance sauces",
     defaultVal: 5,
     min: 0,
     max: 100,
@@ -28,9 +32,11 @@ export const MP_CONCENTRATION: Record<FoodKey, FoodConfig> = {
   },
   salted_seafood: {
     name_kr: "젓갈",
+    name_en: "Salted Fermented Seafood",
     value: 5.30,
     unit: "p/g",
     description: "오징어젓, 낙지젓, 명란젓 등 해산물 염장 가공품",
+    description_en: "Salted seafood delicacies including salted squid, octopus, and pollock roe (Jeotgal)",
     defaultVal: 15,
     min: 0,
     max: 200,
@@ -38,9 +44,11 @@ export const MP_CONCENTRATION: Record<FoodKey, FoodConfig> = {
   },
   seaweed: {
     name_kr: "해조류",
+    name_en: "Seaweed",
     value: 4.00,
     unit: "p/g",
     description: "미역, 다시마, 김 등 바다에서 채취한 다당류 식물군",
+    description_en: "Edible sea vegetables including brown seaweed (Wakame), kelp, and laver (Gim)",
     defaultVal: 20,
     min: 0,
     max: 300,
@@ -48,9 +56,11 @@ export const MP_CONCENTRATION: Record<FoodKey, FoodConfig> = {
   },
   honey: {
     name_kr: "꿀",
+    name_en: "Honey",
     value: 0.18,
     unit: "p/g",
     description: "벌이 수집하는 과정 및 대기 중에서 혼입되는 미세 입자",
+    description_en: "Natural honey containing particles accumulated during foraging and atmospheric settling",
     defaultVal: 10,
     min: 0,
     max: 100,
@@ -58,9 +68,11 @@ export const MP_CONCENTRATION: Record<FoodKey, FoodConfig> = {
   },
   soy_sauce: {
     name_kr: "간장",
+    name_en: "Soy Sauce",
     value: 30.0,
     unit: "p/L",
     description: "대량 유통 및 조미 과정에서 발견되는 액상 장류",
+    description_en: "Liquid brewed and blended soy sauce seasonings",
     defaultVal: 0.05,
     min: 0,
     max: 2.0,
@@ -68,9 +80,11 @@ export const MP_CONCENTRATION: Record<FoodKey, FoodConfig> = {
   },
   beer: {
     name_kr: "맥주",
+    name_en: "Beer",
     value: 9.0,
     unit: "p/L",
     description: "양조 용수 및 병입 과정에서 미량 검출되는 입자",
+    description_en: "Commercial beers with trace particles from brewing water and packaging",
     defaultVal: 1.5,
     min: 0,
     max: 10.0,
@@ -78,9 +92,11 @@ export const MP_CONCENTRATION: Record<FoodKey, FoodConfig> = {
   },
   beverage: {
     name_kr: "음료",
+    name_en: "Bottled Beverages",
     value: 1.75,
     unit: "p/L",
     description: "생수 및 페트병입 탄산음료, 주스 가공품류",
+    description_en: "Bottled mineral water, carbonated soft drinks, and packaged juices",
     defaultVal: 2.0,
     min: 0,
     max: 15.0,
@@ -101,46 +117,54 @@ export const INITIAL_INTAKES: UserIntakes = {
 
 export const MICROPLASTIC_TIPS = [
   {
-    title: "정제/가공 소금 활용하기",
-    desc: "천일염 대신 상대적으로 가공이나 여과 수준이 높은 암염이나 정제 소금을 사용하면 미세플라스틱 섭취를 크게 줄일 수 있습니다."
+    title_kr: "정제/가공 소금 활용하기",
+    title_en: "Opt for Refined or Rock Salt",
+    desc_kr: "천일염 대신 상대적으로 가공이나 여과 수준이 높은 암염이나 정제 소금을 사용하면 미세플라스틱 섭취를 크게 줄일 수 있습니다.",
+    desc_en: "Using well-filtered rock salt or refined table salt instead of raw sea salt can significantly lower your weekly microplastic ingestion."
   },
   {
-    title: "페트병 대신 텀블러 사용하기",
-    desc: "일회용 생수병이나 플라스틱 용기에 든 음료 대신 유리병에 든 제품이나 정수기 필터를 거친 물을 스테인리스/유리 텀블러에 담아 마시는 것이 효과적입니다."
+    title_kr: "페트병 대신 텀블러 사용하기",
+    title_en: "Use Reusable Stainless Steel/Glass Tumblers",
+    desc_kr: "일회용 생수병이나 플라스틱 용기에 든 음료 대신 유리병에 든 제품이나 정수기 필터를 거친 물을 스테인리스/유리 텀블러에 담아 마시는 것이 효과적입니다.",
+    desc_en: "Drinking filtered tap water from stainless steel or glass bottles instead of single-use PET bottled beverages effectively eliminates plastic leaching."
   },
   {
-    title: "해조류 조리 전 철저한 세척",
-    desc: "미역, 다시마 등의 해조류는 물에 씻는 과정에서 표면에 묻어 있던 상당수의 미세플라스틱 입자가 씻겨 나가므로, 흐르는 물에 여러 번 씻는 것이 아주 중요합니다."
+    title_kr: "해조류 조리 전 철저한 세척",
+    title_en: "Rinse Dried Seaweed Thoroughly Before Cooking",
+    desc_kr: "미역, 다시마 등의 해조류는 물에 씻는 과정에서 표면에 묻어 있던 상당수의 미세플라스틱 입자가 씻겨 나가므로, 흐르는 물에 여러 번 씻는 것이 아주 중요합니다.",
+    desc_en: "Rinsing dried seaweeds (kelp, wakame) 2–3 times under running tap water washes away 70% to 84% of adhering microplastic particles."
   },
   {
-    title: "플라스틱 주방용품 멀리하기",
-    desc: "뜨거운 국이나 찌개를 조리할 때 플라스틱 국자나 도구를 사용하지 않고, 흠집이 많이 난 플라스틱 도마 대신 친환경 나무/유리 도마를 사용하는 것이 간접 노출을 줄여줍니다."
+    title_kr: "플라스틱 주방용품 멀리하기",
+    title_en: "Minimize Heated Plastic Cookware",
+    desc_kr: "뜨거운 국이나 찌개를 조리할 때 플라스틱 국자나 도구를 사용하지 않고, 흠집이 많이 난 플라스틱 도마 대신 친환경 나무/유리 도마를 사용하는 것이 간접 노출을 줄여줍니다.",
+    desc_en: "Avoid stirring boiling soups with plastic utensils, and replace scratched plastic cutting boards with solid wood or glass boards to cut down physical abrasion particles."
   }
 ];
 
 export const PYTHON_STREAMLIT_CODE = `import streamlit as st
 import pandas as pd
 
-# 1. 데이터 세팅 (상수 데이터)
+# 1. Dataset Configuration (Scientific Benchmark Data from Pham et al., 2023)
 MP_CONCENTRATION = {
-    "salt": {"name_kr": "소금", "value": 0.22, "unit": "p/g", "desc": "천일염, 천연 암염 및 정제 소금에 함유된 미세플라스틱"},
-    "fish_sauce": {"name_kr": "액젓", "value": 0.60, "unit": "p/g", "desc": "멸치액젓, 까나리액젓 등 발효 어장류"},
-    "salted_seafood": {"name_kr": "젓갈", "value": 5.30, "unit": "p/g", "desc": "오징어젓, 낙지젓, 명란젓 등 해산물 염장 가공품"},
-    "seaweed": {"name_kr": "해조류", "value": 4.00, "unit": "p/g", "desc": "미역, 다시마, 김 등 바다에서 채취한 다당류 식물군"}, 
-    "honey": {"name_kr": "꿀", "value": 0.18, "unit": "p/g", "desc": "벌이 수집하는 과정 및 대기 중에서 혼입되는 미세 입자"},
-    "soy_sauce": {"name_kr": "간장", "value": 30.0, "unit": "p/L", "desc": "대량 유통 및 조미 과정에서 발견되는 액상 장류"},
-    "beer": {"name_kr": "맥주", "value": 9.00, "unit": "p/L", "desc": "양조 용수 및 병입 과정에서 미량 검출되는 입자"},
-    "beverage": {"name_kr": "음료", "value": 1.75, "unit": "p/L", "desc": "생수 및 페트병입 탄산음료, 주스 가공품류"}
+    "salt": {"name": "Salt", "value": 0.22, "unit": "p/g", "desc": "Microplastics in sea salt, rock salt, and refined salt"},
+    "fish_sauce": {"name": "Fish Sauce", "value": 0.60, "unit": "p/g", "desc": "Fermented fish seasoning sauces"},
+    "salted_seafood": {"name": "Salted Seafood", "value": 5.30, "unit": "p/g", "desc": "Salted fermented seafood products (Jeotgal)"},
+    "seaweed": {"name": "Seaweed", "value": 4.00, "unit": "p/g", "desc": "Dried kelp, brown seaweed (Wakame), and laver (Gim)"}, 
+    "honey": {"name": "Honey", "value": 0.18, "unit": "p/g", "desc": "Honey with airborne and foraging micro-particulates"},
+    "soy_sauce": {"name": "Soy Sauce", "value": 30.0, "unit": "p/L", "desc": "Liquid brewed soy sauce seasoning"},
+    "beer": {"name": "Beer", "value": 9.00, "unit": "p/L", "desc": "Bottled & canned commercial brewed beers"},
+    "beverage": {"name": "Bottled Beverages", "value": 1.75, "unit": "p/L", "desc": "Bottled spring water, carbonated soft drinks, juices"}
 }
 
-# 페이지 설정
+# Streamlit Page Config
 st.set_page_config(
-    page_title="주간 미세플라스틱 섭취량 계산기",
+    page_title="Weekly Microplastics Exposure Calculator",
     page_icon="⚠️",
     layout="wide"
 )
 
-# Custom CSS for Bento feel
+# Custom Styling for Bento Feel
 st.markdown("""
 <style>
     .bento-card {
@@ -162,71 +186,70 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# 2. UI 구성
+# 2. Header & Overview
 st.markdown("### 🧬 Environmental Health Tracker")
-st.title("⚠️ 나의 주간 미세플라스틱 섭취량 계산기")
-st.markdown("매일 먹는 일상 식품들을 통해 우리는 자신도 모르게 미세플라스틱을 섭취하고 있습니다. 각 식품군별 주간 섭취량을 조절하여 총 누적 노출량을 실시간으로 자가 진단하십시오.")
+st.title("⚠️ Weekly Microplastics Exposure Calculator")
+st.markdown("Quantify your weekly dietary microplastic ingestion based on empirical food concentration data. Adjust your consumption sliders to diagnose aggregate exposure in real time.")
 
 st.markdown("---")
 
-# 입력을 위한 두 개의 열 구성
+# Layout: Two Columns (Inputs & Results)
 col_left, col_right = st.columns([6, 5])
 
 user_inputs = {}
 
 with col_left:
-    st.subheader("📊 식품군별 주간 섭취량 입력")
+    st.subheader("📊 Weekly Dietary Food Intake Settings")
     
-    # 2열 Bento 스타일 배치
     sub_col1, sub_col2 = st.columns(2)
     
     with sub_col1:
-        st.markdown("#### 🌾 고체 식품군 (g 단위)")
+        st.markdown("#### 🌾 Solid Foods (grams/week)")
         user_inputs["salt"] = st.slider(
-            "🧂 소금 (g/주)",
+            "🧂 Salt (g/week)",
             min_value=0.0, max_value=100.0, value=10.0, step=1.0,
             help=MP_CONCENTRATION["salt"]["desc"]
         )
         user_inputs["fish_sauce"] = st.slider(
-            "🐟 액젓 (g/주)",
+            "🐟 Fish Sauce (g/week)",
             min_value=0.0, max_value=100.0, value=5.0, step=1.0,
             help=MP_CONCENTRATION["fish_sauce"]["desc"]
         )
         user_inputs["salted_seafood"] = st.slider(
-            "🦐 젓갈 (g/주)",
+            "🦐 Salted Seafood (g/week)",
             min_value=0.0, max_value=200.0, value=15.0, step=5.0,
             help=MP_CONCENTRATION["salted_seafood"]["desc"]
         )
         user_inputs["seaweed"] = st.slider(
-            "🌿 해조류 (g/주)",
+            "🌿 Seaweed (g/week)",
             min_value=0.0, max_value=300.0, value=20.0, step=5.0,
             help=MP_CONCENTRATION["seaweed"]["desc"]
         )
         user_inputs["honey"] = st.slider(
-            "🍯 꿀 (g/주)",
+            "🍯 Honey (g/week)",
             min_value=0.0, max_value=100.0, value=10.0, step=1.0,
             help=MP_CONCENTRATION["honey"]["desc"]
         )
 
     with sub_col2:
-        st.markdown("#### 🍹 액체 식품군 (L 단위)")
+        st.markdown("#### 🍹 Liquid Foods (liters/week)")
         user_inputs["soy_sauce"] = st.slider(
-            "🧴 간장 (L/주)",
+            "🧴 Soy Sauce (L/week)",
             min_value=0.0, max_value=2.0, value=0.05, step=0.01,
             help=MP_CONCENTRATION["soy_sauce"]["desc"]
         )
         user_inputs["beer"] = st.slider(
-            "🍺 맥주 (L/주)",
+            "🍺 Beer (L/week)",
             min_value=0.0, max_value=10.0, value=1.5, step=0.1,
             help=MP_CONCENTRATION["beer"]["desc"]
         )
         user_inputs["beverage"] = st.slider(
-            "🥤 음료 (L/주)",
+            "🥤 Bottled Beverages (L/week)",
             min_value=0.0, max_value=15.0, value=2.0, step=0.1,
             help=MP_CONCENTRATION["beverage"]["desc"]
         )
 
-# 3. 계산 로직
+# 3. Calculation Logic
 exposure_data = []
 total_particles = 0.0
 
@@ -238,30 +261,30 @@ for key, config in MP_CONCENTRATION.items():
     
     exposure_data.append({
         "key": key,
-        "식품군": config["name_kr"],
-        "섭취량": intake,
-        "단위": "g" if config["unit"] == "p/g" else "L",
-        "농도": concentration,
-        "농도단위": config["unit"],
-        "노출량 (개)": exposure
+        "Food Category": config["name"],
+        "Intake": intake,
+        "Unit": "g" if config["unit"] == "p/g" else "L",
+        "Concentration": concentration,
+        "Conc Unit": config["unit"],
+        "Weekly Exposure (particles)": exposure
     })
 
 df = pd.DataFrame(exposure_data)
 if total_particles > 0:
-    df["점유 비중 (%)"] = (df["노출량 (개)"] / total_particles) * 100
+    df["Share (%)"] = (df["Weekly Exposure (particles)"] / total_particles) * 100
 else:
-    df["점유 비중 (%)"] = 0.0
+    df["Share (%)"] = 0.0
 
-# 1 particle = ~0.002 mg 추정 중량
+# Approx weight: ~0.002 mg per typical particle
 plastic_weight_mg = total_particles * 0.002
-credit_card_fraction = plastic_weight_mg / 5000.0  # 신용카드 1장 = 5g (5000mg)
+credit_card_fraction = plastic_weight_mg / 5000.0  # 1 credit card = 5g (5,000 mg)
 
-# 내림차순 정렬
-df_sorted = df.sort_values(by="노출량 (개)", ascending=False)
+# Sort descending
+df_sorted = df.sort_values(by="Weekly Exposure (particles)", ascending=False)
 worst_row = df_sorted.iloc[0] if total_particles > 0 else None
 
 with col_right:
-    st.subheader("🔍 나의 주간 노출량 진단 결과")
+    st.subheader("🔍 Exposure Diagnosis Results")
     
     # Bento Metric Card
     st.markdown(f"""
@@ -274,66 +297,65 @@ with col_right:
         </h1>
         <p style="color: #94a3b8; font-size: 14px; font-weight: bold;">particles / week</p>
         <p style="color: #64748b; font-size: 12px; line-height: 1.5; max-width: 350px; margin: 10px auto 0 auto;">
-            당신이 이번 주에 식품군을 통해 직접적으로 섭취한 것으로 추정되는 미세플라스틱 알갱이의 총합입니다.
+            Estimated microplastic particles ingested directly through monitored food groups during the week.
         </p>
         <hr style="border-color: #1e293b; margin: 20px 0 15px 0;">
         <div style="display: flex; justify-content: space-around; text-align: center;">
             <div>
-                <span style="color: #64748b; font-size: 10px; font-weight: bold; text-transform: uppercase;">추정 중량</span>
-                <span style="color: #e2e8f0; font-size: 14px; font-weight: 900; display: block; margin-top: 3px;">약 {plastic_weight_mg:.2f} mg</span>
+                <span style="color: #64748b; font-size: 10px; font-weight: bold; text-transform: uppercase;">Estimated Mass</span>
+                <span style="color: #e2e8f0; font-size: 14px; font-weight: 900; display: block; margin-top: 3px;">~{plastic_weight_mg:.2f} mg</span>
             </div>
             <div style="border-left: 1px solid #1e293b;"></div>
             <div>
-                <span style="color: #64748b; font-size: 10px; font-weight: bold; text-transform: uppercase;">연간 신용카드</span>
-                <span style="color: #fbbf24; font-size: 14px; font-weight: 900; display: block; margin-top: 3px;">연간 {(credit_card_fraction * 52):.1f}장 분량</span>
+                <span style="color: #64748b; font-size: 10px; font-weight: bold; text-transform: uppercase;">Annual Card Eqv.</span>
+                <span style="color: #fbbf24; font-size: 14px; font-weight: 900; display: block; margin-top: 3px;">~{(credit_card_fraction * 52):.2f} card/yr</span>
             </div>
         </div>
     </div>
     """, unsafe_allow_html=True)
     
     if total_particles > 0 and worst_row is not None:
-        st.warning(f"⚠️ **주의 요인 분석:** 현재 입력값 기준 가장 노출 비중이 큰 요인은 **[{worst_row['식품군']}]** 이며, 전체 노출량의 무려 **{worst_row['점유 비중 (%)']:.1f}%** 를 차지하고 있습니다.")
+        st.warning(f"⚠️ **Primary Exposure Vector:** The single largest contributor is **[{worst_row['Food Category']}]**, representing **{worst_row['Share (%)']:.1f}%** of your total intake.")
     else:
-        st.info("💡 **가이드:** 주간 식품 섭취 수치를 설정하시면 실시간 자가 노출량이 정밀하게 계산됩니다.")
+        st.info("💡 **Guide:** Adjust dietary intake levels to compute exposure metrics.")
 
 st.markdown("---")
 
 col_bottom_left, col_bottom_right = st.columns([6, 5])
 
 with col_bottom_left:
-    st.subheader("📊 품목별 노출 점유율 (Top Exposure)")
+    st.subheader("📊 Category Share (Top Exposure)")
     
-    df_chart = df_sorted[df_sorted["노출량 (개)"] > 0]
+    df_chart = df_sorted[df_sorted["Weekly Exposure (particles)"] > 0]
     if not df_chart.empty:
-        # Mini bar chart representation
         for idx, row in df_chart.head(4).iterrows():
-            st.markdown(f"**{row['식품군']}** - {row['노출량 (개)']:.1f} p ({row['점유 비중 (%)']:.1f}%)")
-            st.progress(float(row['점유 비중 (%)'] / 100.0))
+            st.markdown(f"**{row['Food Category']}** - {row['Weekly Exposure (particles)']:.1f} p ({row['Share (%)']:.1f}%)")
+            st.progress(float(row['Share (%)'] / 100.0))
     else:
-        st.info("섭취량이 0인 경우 차트가 비어있게 됩니다.")
+        st.info("No exposure recorded.")
         
-    with st.expander("📝 상세 섭취 및 노출 데이터 테이블 보기"):
+    with st.expander("📝 Detailed Exposure Breakdown Table"):
         st.dataframe(
-            df_sorted[["식품군", "농도", "농도단위", "섭취량", "단위", "노출량 (개)", "점유 비중 (%)"]],
+            df_sorted[["Food Category", "Concentration", "Conc Unit", "Intake", "Unit", "Weekly Exposure (particles)", "Share (%)"]],
             use_container_width=True,
             hide_index=True
         )
 
 with col_bottom_right:
-    st.subheader("💡 일상 속 미세플라스틱 노출 절감 가이드")
+    st.subheader("💡 Practical Exposure Reduction Guidelines")
     st.success("""
-    1. **정제/가공 소금 선택**: 천일염 대신 정제 공정을 잘 거친 정제염이나 암염을 위주로 섭취하세요.
-    2. **텀블러 생활화**: 일회용 페트병입 음료 대신 다회용 유리병이나 스테인리스 텀블러를 적극 사용해 보세요.
-    3. **해조류 철저 세척**: 김, 다시마, 미역 등은 조리 전에 흐르는 맑은 물에 충분히 여러 번 흔들어 씻어내십시오.
-    4. **플라스틱 가열 자제**: 뜨거운 조리 도중에 플라스틱 국자나 도마 등을 멀리하고 친환경 나무/스테인리스를 쓰면 노출이 격감합니다.
+    1. **Choose Refined/Rock Salt**: High-filtration rock salt or refined vacuum salt has far fewer particles than unrefined sea salt.
+    2. **Switch from PET to Tumblers**: Drink filtered water from glass or stainless steel bottles to avoid plastic container leaching.
+    3. **Rinse Dried Seaweed**: Washing dried seaweed (Wakame, Kelp) 2–3 times under running tap water removes 70–84% of microplastics.
+    4. **Avoid Heated Plastic Utensils**: Replace scratched plastic cutting boards and plastic ladles with wood or stainless steel.
     """)
 
-# 학술 논문 레퍼런스 표기
+# Academic Research Citation
 st.markdown("""
 <div class="ref-card">
-    <p style="margin: 0; font-size: 12px; font-weight: bold; color: #1e1b4b;">📖 학술 연구 레퍼런스 (Scientific Academic Reference)</p>
+    <p style="margin: 0; font-size: 12px; font-weight: bold; color: #1e1b4b;">📖 Academic Peer-Reviewed Reference</p>
     <p style="margin: 5px 0 2px 0; font-size: 14px; font-weight: bold; color: #1e293b; font-family: sans-serif;">
-        "Analysis of microplastics in various foods and assessment of aggregate human exposure via food consumption in korea"
+        "Analysis of microplastics in various foods and assessment of aggregate human exposure via food consumption in Korea"
     </p>
     <p style="margin: 0; font-size: 11px; color: #475569;">
         Dat Thanh Pham, <b>Jinwoo Kim</b>, Sang-Hwa Lee, Juyang Kim, Dowoon Kim, Soonki Hong, Jaehak Jung, Jung-Hwan Kwon
@@ -345,5 +367,5 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown("---")
-st.caption("주간 미세플라스틱 노출량 계산기 | Bento Grid Theme Streamlit MVP App | 한국 성인 평균 섭취 모델 기반")
+st.caption("Weekly Microplastics Exposure Calculator | Bento Grid Theme Streamlit MVP App | Scientific Aggregate Intake Model")
 `;

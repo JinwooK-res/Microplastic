@@ -5,9 +5,11 @@
 
 export interface FoodConfig {
   name_kr: string;
+  name_en: string;
   value: number; // Concentration value
   unit: "p/g" | "p/L"; // Particles per gram or particles per Liter
   description: string;
+  description_en: string;
   defaultVal: number;
   min: number;
   max: number;
@@ -38,6 +40,7 @@ export interface UserIntakes {
 export interface ExposureResult {
   key: FoodKey;
   name_kr: string;
+  name_en: string;
   intake: number;
   unit: "g" | "L";
   concentration: number;

@@ -32,15 +32,15 @@ export const ExposureChatbot: React.FC<ExposureChatbotProps> = ({
 
   // Initialize with tailored welcome message based on current inputs
   useEffect(() => {
-    const timeStr = new Date().toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" });
-    const initialText = `안녕하세요! **미세플라스틱 노출 분석 AI 전문 어드바이저**입니다. 🤖
+    const timeStr = new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+    const initialText = `Hello! I am your **Dietary Microplastic Exposure AI Advisor**. 🤖
 
-현재 계산된 회원님의 주간 추정치:
-- 📊 **총 주간 섭취량**: **${totalExposure.toLocaleString("ko-KR", { minimumFractionDigits: 1, maximumFractionDigits: 1 })} particles/week**
-- ⚖️ **추정 중량**: 약 **${plasticWeightMg.toFixed(2)} mg** (연간 신용카드 약 ${(creditCardFraction * 52).toFixed(1)}장 분량)
-- ⚠️ **최대 노출 식품**: **${worstFood ? `${worstFood.name_kr} (${worstFood.percentage.toFixed(1)}%)` : "선택 없음"}**
+Based on your current dietary selections:
+- 📊 **Total Weekly Ingestion**: **${totalExposure.toLocaleString("en-US", { minimumFractionDigits: 1, maximumFractionDigits: 1 })} particles/week**
+- ⚖️ **Estimated Mass**: ~**${plasticWeightMg.toFixed(2)} mg** (annual equivalent: ~${(creditCardFraction * 52).toFixed(2)} credit cards/year)
+- ⚠️ **Primary Contributor**: **${worstFood ? `${worstFood.name_en} (${worstFood.percentage.toFixed(1)}%)` : "None"}**
 
-계산된 노출량의 실제 건강 영향, **Pham et al. (2023)** 논문의 한국인 평균 실측 데이터와의 비교, 또는 섭취량을 대폭 줄이는 세척/조리 팁 등에 대해 무엇이든 편하게 질문해 주세요!`;
+Feel free to ask about the real-world health implications of your score, comparisons against the empirical Korean adult baseline in **Pham et al. (2023)**, or practical kitchen washing and cooking tips to reduce microplastic intake!`;
 
     setMessages([
       {
@@ -64,7 +64,7 @@ export const ExposureChatbot: React.FC<ExposureChatbotProps> = ({
     const query = (userText || input).trim();
     if (!query || loading) return;
 
-    const timeStr = new Date().toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" });
+    const timeStr = new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
     const userMsg: ChatMessage = {
       id: `user-${Date.now()}`,
       role: "user",
@@ -89,6 +89,7 @@ export const ExposureChatbot: React.FC<ExposureChatbotProps> = ({
         creditCardFraction: (creditCardFraction * 52).toFixed(2),
         worstFood: worstFood
           ? {
+              name_en: worstFood.name_en,
               name_kr: worstFood.name_kr,
               percentage: worstFood.percentage.toFixed(1),
               intake: worstFood.intake,
@@ -96,6 +97,7 @@ export const ExposureChatbot: React.FC<ExposureChatbotProps> = ({
             }
           : null,
         results: results.map((r) => ({
+          name_en: r.name_en,
           name_kr: r.name_kr,
           intake: r.intake,
           unit: r.unit,
@@ -119,13 +121,13 @@ export const ExposureChatbot: React.FC<ExposureChatbotProps> = ({
       });
 
       const data = await res.json();
-      const replyText = data.reply || "답변을 받아오지 못했습니다. 잠시 후 다시 시도해 주세요.";
+      const replyText = data.reply || "Failed to retrieve a response. Please try again shortly.";
 
       const aiMsg: ChatMessage = {
         id: `model-${Date.now()}`,
         role: "model",
         content: replyText,
-        timestamp: new Date().toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" }),
+        timestamp: new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
       };
 
       setMessages((prev) => [...prev, aiMsg]);
@@ -134,8 +136,8 @@ export const ExposureChatbot: React.FC<ExposureChatbotProps> = ({
         id: `err-${Date.now()}`,
         role: "model",
         content:
-          "서버와 통신하는 중 문제가 발생했습니다. 잠시 후 다시 시도해 주시거나 네트워크 상태를 확인해 주세요.",
-        timestamp: new Date().toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" }),
+          "There was an error communicating with the server. Please check your network connection and try again.",
+        timestamp: new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
       };
       setMessages((prev) => [...prev, errorMsg]);
     } finally {
@@ -144,22 +146,22 @@ export const ExposureChatbot: React.FC<ExposureChatbotProps> = ({
   };
 
   const handleResetChat = () => {
-    const timeStr = new Date().toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" });
+    const timeStr = new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
     setMessages([
       {
         id: `welcome-${Date.now()}`,
         role: "model",
-        content: `대화 내용이 초기화되었습니다. 현재 설정된 주간 총 섭취량은 **${totalExposure.toFixed(1)} particles/week** 입니다. 궁금하신 점을 말씀해 주세요!`,
+        content: `Conversation reset. Your current weekly estimated exposure is **${totalExposure.toFixed(1)} particles/week**. What would you like to explore?`,
         timestamp: timeStr,
       },
     ]);
   };
 
   const QUICK_QUESTIONS = [
-    "현재 나의 노출량 수치가 일반 성인 대비 높은 편인가요?",
-    worstFood ? `가장 비중이 높은 [${worstFood.name_kr}] 노출을 어떻게 줄일 수 있나요?` : "가장 주의해야 할 식품은 무엇인가요?",
-    "논문(Pham et al., 2023)의 실제 한국인 평균 섭취량과 비교해줘",
-    "해조류나 젓갈을 조리할 때 미세플라스틱을 줄이는 실천법은?",
+    "Is my calculated exposure higher than the average adult baseline?",
+    worstFood ? `How can I significantly reduce exposure from [${worstFood.name_en}]?` : "Which foods pose the highest risk of microplastics?",
+    "How does this compare to the findings in Pham et al. (2023)?",
+    "Does rinsing dried seaweed or cooking in glass actually remove microplastics?",
   ];
 
   return (
@@ -173,14 +175,14 @@ export const ExposureChatbot: React.FC<ExposureChatbotProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-extrabold text-white tracking-tight font-display flex items-center gap-1.5">
-                AI 노출량 분석 & 자문 챗봇
+                AI Exposure Analysis & Scientific Advisor
               </h3>
               <span className="bg-amber-400/10 text-amber-400 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-400/20">
                 Gemini 3.8 Flash
               </span>
             </div>
             <p className="text-[11px] text-slate-400">
-              실시간 계산된 주간 노출량 데이터 및 학술 연구 기준 기반 맞춤 설명
+              Interactive explanations grounded in empirical food research and your real-time intake data
             </p>
           </div>
         </div>
@@ -188,13 +190,13 @@ export const ExposureChatbot: React.FC<ExposureChatbotProps> = ({
         <div className="flex items-center gap-3">
           <div className="hidden sm:flex items-center gap-1.5 text-[11px] bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700 text-slate-300">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>연동 섭취량: <strong className="text-amber-400 font-mono">{totalExposure.toFixed(1)} p/w</strong></span>
+            <span>Active Exposure: <strong className="text-amber-400 font-mono">{totalExposure.toFixed(1)} p/w</strong></span>
           </div>
 
           <button
             onClick={handleResetChat}
             className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-colors cursor-pointer"
-            title="대화 초기화"
+            title="Reset conversation"
           >
             <Trash2 className="w-4 h-4" />
           </button>
@@ -204,7 +206,7 @@ export const ExposureChatbot: React.FC<ExposureChatbotProps> = ({
       {/* Suggestion Prompts Banner */}
       <div className="bg-slate-50/80 border-b border-slate-150 px-6 py-2.5 overflow-x-auto scrollbar-none flex items-center gap-2 text-xs">
         <span className="text-slate-400 text-[11px] font-semibold shrink-0 flex items-center gap-1">
-          <Sparkles className="w-3 h-3 text-amber-500" /> 추천 질문:
+          <Sparkles className="w-3 h-3 text-amber-500" /> Suggested Prompts:
         </span>
         <div className="flex items-center gap-1.5 flex-nowrap">
           {QUICK_QUESTIONS.map((q, idx) => (
@@ -249,7 +251,7 @@ export const ExposureChatbot: React.FC<ExposureChatbotProps> = ({
                 }`}
               >
                 <div className="flex items-center justify-between text-[10px] opacity-70 mb-1">
-                  <span className="font-bold">{isUser ? "나" : "AI 노출량 어드바이저"}</span>
+                  <span className="font-bold">{isUser ? "You" : "AI Exposure Advisor"}</span>
                   <span className="font-mono">{msg.timestamp}</span>
                 </div>
 
@@ -279,7 +281,7 @@ export const ExposureChatbot: React.FC<ExposureChatbotProps> = ({
             </div>
             <div className="bg-white border border-slate-200 rounded-2xl rounded-tl-xs p-4 text-xs text-slate-500 shadow-2xs flex items-center gap-2.5">
               <Loader2 className="w-4 h-4 text-amber-500 animate-spin" />
-              <span>현재 노출량 지표 및 논문 연구 데이터를 종합 분석 중입니다...</span>
+              <span>Analyzing dietary exposure metrics against empirical research data...</span>
             </div>
           </div>
         )}
@@ -300,7 +302,7 @@ export const ExposureChatbot: React.FC<ExposureChatbotProps> = ({
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="노출량 의미, 건강 영향, 위험도 평가나 저감 팁에 대해 질문하세요..."
+            placeholder="Ask about toxicity, comparisons with average adult baselines, or tips to reduce intake..."
             disabled={loading}
             className="w-full bg-slate-50 border border-slate-250 rounded-xl px-4 py-2.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all disabled:opacity-50"
           />
@@ -315,7 +317,7 @@ export const ExposureChatbot: React.FC<ExposureChatbotProps> = ({
             <Loader2 className="w-4 h-4 animate-spin" />
           ) : (
             <>
-              <span>전송</span>
+              <span>Send</span>
               <Send className="w-3.5 h-3.5" />
             </>
           )}

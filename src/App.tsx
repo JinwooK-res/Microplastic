@@ -79,6 +79,7 @@ export default function App() {
       calculated.push({
         key,
         name_kr: config.name_kr,
+        name_en: config.name_en,
         intake,
         unit: config.unit === "p/g" ? "g" : "L",
         concentration: config.value,
@@ -114,12 +115,9 @@ export default function App() {
   };
 
   // Equivalent to credit cards or objects
-  // Let's assume 1 typical microplastic particle is very light, 
-  // but to give context: researchers estimate a weekly intake of ~2,000 particles is about 5g of plastic (equivalent to 1 credit card weight).
-  // So: Weight equivalent = totalExposure * (5.0 / 2000.0) grams
+  // Researchers estimate a weekly intake of ~2,000 particles is about 5g of plastic (equivalent to 1 credit card weight).
   const plasticWeightMg = useMemo(() => {
-    // 1 particle of microplastics in these food vectors is highly variable. 
-    // Let's use a standard metric: 1 particle = ~0.002 mg for educational illustration.
+    // Standard approximation: 1 particle = ~0.002 mg for educational illustration.
     return totalExposure * 0.002;
   }, [totalExposure]);
 
@@ -132,7 +130,8 @@ export default function App() {
   const barChartData = useMemo(() => {
     return results
       .map((item) => ({
-        name: item.name_kr,
+        name: item.name_en,
+        name_kr: item.name_kr,
         exposure: Number(item.exposure.toFixed(2)),
         unit: item.unit,
         intake: item.intake,
@@ -145,7 +144,8 @@ export default function App() {
     return results
       .filter((item) => item.exposure > 0)
       .map((item) => ({
-        name: item.name_kr,
+        name: item.name_en,
+        name_kr: item.name_kr,
         value: Number(item.exposure.toFixed(2)),
         percentage: Number(item.percentage.toFixed(1)),
       }));
@@ -172,10 +172,10 @@ export default function App() {
             <span className="text-2xl" id="logo-icon">⚠️</span>
             <div>
               <h1 className="text-base sm:text-lg font-extrabold text-slate-800 tracking-tight font-display">
-                나의 주간 미세플라스틱 섭취량 계산기
+                Weekly Microplastics Exposure Calculator
               </h1>
               <p className="text-xs text-slate-400 hidden sm:block">
-                Weekly Microplastics Exposure Calculator Dashboard
+                Dietary Exposure Assessment Dashboard based on Academic Research
               </p>
             </div>
           </div>
@@ -192,7 +192,7 @@ export default function App() {
               }`}
             >
               <TrendingUp className="w-3.5 h-3.5" />
-              대시보드 계산기
+              Exposure Calculator
             </button>
             <button
               id="tab-streamlit"
@@ -204,7 +204,7 @@ export default function App() {
               }`}
             >
               <Terminal className="w-3.5 h-3.5" />
-              Streamlit Python 코드
+              Streamlit Python Code
             </button>
           </div>
         </div>
@@ -218,14 +218,14 @@ export default function App() {
               Environmental Health Tracker
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-slate-850 tracking-tight font-display flex items-center gap-2">
-              ⚠️ 나의 주간 미세플라스틱 섭취량 계산기
+              ⚠️ Weekly Dietary Microplastics Calculator
             </h2>
             <p className="text-xs text-slate-500 leading-relaxed max-w-2xl">
-              일상 가공 및 정제 식품들을 통해 자신도 모르는 사이에 들어오는 미세플라스틱 수치를 추적해 보세요.
+              Track and evaluate microplastic particle ingestion from regular processed food products and staples in your weekly diet.
             </p>
           </div>
           <div className="text-right text-slate-400 text-xs italic font-medium bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200/60 self-stretch md:self-auto flex items-center justify-center">
-            Data Source: MP_CONCENTRATION Standards v1.0
+            Data Model: MP_CONCENTRATION Standards (Pham et al., 2023)
           </div>
         </div>
 
@@ -246,20 +246,20 @@ export default function App() {
                     <div>
                       <h3 className="text-base font-extrabold text-slate-800 flex items-center gap-2 font-display">
                         <Sparkles className="w-4 h-4 text-amber-500 animate-pulse" />
-                        주간 섭취 식품군 설정
+                        Weekly Dietary Intake Settings
                       </h3>
                       <p className="text-xs text-slate-500">
-                        8개 핵심 식품군의 주간 식사 노출량을 조절하십시오 (단위 구분 확인)
+                        Adjust your consumption for 8 staple categories (check grams vs. liters)
                       </p>
                     </div>
                     <button
                       id="btn-reset-inputs"
                       onClick={handleReset}
                       className="text-xs text-slate-600 hover:text-indigo-600 flex items-center gap-1 border border-slate-200 bg-white px-2.5 py-1.5 rounded-lg hover:bg-slate-50 transition-colors shadow-2xs font-semibold cursor-pointer"
-                      title="기본값으로 재설정"
+                      title="Reset to default baseline"
                     >
                       <RefreshCw className="w-3 h-3" />
-                      초기화
+                      Reset
                     </button>
                   </div>
 
@@ -291,14 +291,14 @@ export default function App() {
                           <div className="flex justify-between items-start">
                             <span className="text-sm font-extrabold flex items-center gap-1.5 text-slate-800">
                               <span className="text-base">{EMOJIS[key]}</span>
-                              {food.name_kr}
+                              {food.name_en}
                             </span>
                             <span className="text-[10px] text-slate-400 font-mono bg-slate-50 px-2 py-0.5 rounded-full border border-slate-100">
                               {food.value} {food.unit}
                             </span>
                           </div>
 
-                          <p className="text-[11px] text-slate-400 leading-tight min-h-[32px]">{food.description}</p>
+                          <p className="text-[11px] text-slate-400 leading-tight min-h-[32px]">{food.description_en}</p>
                           
                           {/* Slider control with custom styles */}
                           <div className="space-y-1">
@@ -331,7 +331,7 @@ export default function App() {
                               className="w-full bg-transparent text-right font-bold text-slate-800 text-xs focus:outline-none focus:ring-0"
                             />
                             <span className="text-slate-500 text-[10px] font-bold pl-2 shrink-0">
-                              {isSolid ? "그램 (g)" : "리터 (L)"}
+                              {isSolid ? "Grams (g)" : "Liters (L)"}
                             </span>
                           </div>
                         </div>
@@ -353,32 +353,32 @@ export default function App() {
 
                   <span className="px-3 py-1 bg-amber-400/10 text-amber-400 border border-amber-400/20 text-[10px] font-black rounded-full uppercase tracking-widest flex items-center gap-1.5">
                     <Sparkles className="w-3 h-3 animate-pulse" />
-                    총 주간 미세플라스틱 섭취량
+                    Total Weekly Microplastic Ingestion
                   </span>
 
                   <div className="flex flex-col items-center text-center">
                     <span id="metric-total-exposure" className="text-6xl sm:text-7xl font-black text-amber-400 tracking-tight font-display">
-                      {totalExposure.toLocaleString("ko-KR", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}
+                      {totalExposure.toLocaleString("en-US", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}
                     </span>
                     <span className="text-base font-bold text-slate-400 tracking-wider mt-2">particles / week</span>
                   </div>
 
                   <p className="text-center text-slate-400 text-xs leading-relaxed max-w-sm">
-                    당신이 이번 주에 섭취한 것으로 추정되는 미세플라스틱 알갱이의 총 수치입니다.
+                    Estimated total count of microplastic particles ingested weekly through the 8 staple food categories.
                   </p>
 
                   {/* Equivalent metrics comparison */}
                   <div className="w-full grid grid-cols-2 gap-4 pt-4 border-t border-slate-800">
                     <div className="text-center border-r border-slate-800/80 pr-2">
-                      <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">추정 중량</span>
+                      <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Estimated Mass</span>
                       <span className="text-sm font-black text-slate-200 block mt-0.5">
-                        약 {plasticWeightMg.toFixed(2)} mg
+                        ~{plasticWeightMg.toFixed(2)} mg
                       </span>
                     </div>
                     <div className="text-center pl-2">
-                      <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">연간 카드 환산</span>
+                      <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Credit Card Eq.</span>
                       <span className="text-sm font-black text-amber-400 block mt-0.5">
-                        연간 {(creditCardFraction * 52).toFixed(1)} 장 분량
+                        ~{(creditCardFraction * 52).toFixed(2)} cards / yr
                       </span>
                     </div>
                   </div>
@@ -391,16 +391,16 @@ export default function App() {
                     <div className="text-[11px] space-y-1">
                       <p className="font-bold text-slate-200">
                         {totalExposure === 0 ? (
-                          "식품 섭취량을 조절하여 결과를 도출하십시오."
+                          "Adjust food intake sliders to view your exposure breakdown."
                         ) : worstFood ? (
-                          `섭취 비중이 가장 높은 요인은 [${worstFood.name_kr}] 입니다.`
+                          `Top contributing category: [${worstFood.name_en}]`
                         ) : (
-                          "섭취량이 안전하게 도출되었습니다."
+                          "Dietary intake calculated within baseline."
                         )}
                       </p>
                       {totalExposure > 0 && worstFood && (
                         <p className="text-slate-400 leading-normal">
-                          총 노출량 중 {worstFood.name_kr}(이)가 무려 <strong>{worstFood.percentage.toFixed(1)}%</strong>를 기여합니다.
+                          {worstFood.name_en} accounts for <strong>{worstFood.percentage.toFixed(1)}%</strong> of your total weekly microplastic intake.
                         </p>
                       )}
                     </div>
@@ -411,10 +411,10 @@ export default function App() {
                 <div id="visual-chart-card" className="bg-white rounded-3xl border border-slate-200 shadow-2xs p-6 space-y-4">
                   <div className="border-b border-slate-100 pb-3">
                     <h3 className="text-sm font-extrabold text-slate-800 font-display">
-                      📊 품목별 섭취 비중 (Top Exposure)
+                      📊 Exposure by Food Category
                     </h3>
                     <p className="text-[11px] text-slate-400">
-                      가장 많은 미세플라스틱 노출을 유발하는 원인 진단
+                      Breakdown of primary microplastic exposure vectors
                     </p>
                   </div>
 
@@ -422,7 +422,7 @@ export default function App() {
                     <div className="h-48 flex flex-col items-center justify-center text-center p-4">
                       <Coffee className="w-6 h-6 text-slate-300 mb-1.5" />
                       <p className="text-xs font-bold text-slate-400">
-                        분석할 데이터가 발견되지 않았습니다
+                        No intake data entered yet
                       </p>
                     </div>
                   ) : (
@@ -430,7 +430,7 @@ export default function App() {
                       {/* Top 4 Custom Mini Bar representation for pristine bento layout feel */}
                       <div className="space-y-2.5">
                         {barChartData.slice(0, 4).map((entry) => {
-                          const foodEntry = results.find(r => r.name_kr === entry.name);
+                          const foodEntry = results.find(r => r.name_en === entry.name);
                           const color = foodEntry ? COLORS[foodEntry.key] : "#f59e0b";
                           return (
                             <div key={entry.name} className="space-y-1">
@@ -465,13 +465,13 @@ export default function App() {
                               <Tooltip
                                 contentStyle={{ backgroundColor: "#0f172a", borderRadius: "8px", border: "none", color: "#fff", fontSize: "11px" }}
                                 formatter={(value: any, name: any, props: any) => [
-                                  `${value} 개 (${props.payload.percentage}%)`,
-                                  `노출`
+                                  `${value} particles (${props.payload.percentage}%)`,
+                                  `Exposure`
                                 ]}
                               />
                               <Bar dataKey="exposure" radius={[3, 3, 0, 0]}>
                                 {barChartData.map((entry, index) => {
-                                  const foodEntry = results.find(r => r.name_kr === entry.name);
+                                  const foodEntry = results.find(r => r.name_en === entry.name);
                                   const color = foodEntry ? COLORS[foodEntry.key] : "#6366f1";
                                   return <Cell key={`cell-${index}`} fill={color} />;
                                 })}
@@ -500,10 +500,10 @@ export default function App() {
                   <div>
                     <h2 className="text-base font-bold text-slate-900 flex items-center gap-2 font-display">
                       <Terminal className="w-5 h-5 text-indigo-600" />
-                      Streamlit Python MVP 코드 추출
+                      Export Streamlit Python MVP Code
                     </h2>
                     <p className="text-xs text-slate-500">
-                      로컬 터미널에서 즉시 실행하고 배포할 수 있는 100% 완전한 단일 파이썬 코드입니다.
+                      Standalone, runnable Python script ready for local execution or Streamlit Cloud deployment.
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
@@ -515,12 +515,12 @@ export default function App() {
                       {copied ? (
                         <>
                           <Check className="w-3.5 h-3.5 text-emerald-600" />
-                          복사 완료!
+                          Copied!
                         </>
                       ) : (
                         <>
                           <Copy className="w-3.5 h-3.5" />
-                          전체 코드 복사하기
+                          Copy Python Code
                         </>
                       )}
                     </button>
@@ -531,12 +531,12 @@ export default function App() {
                 <div className="bg-indigo-50/60 rounded-xl p-4 border border-indigo-100 text-xs text-indigo-950 space-y-2">
                   <p className="font-bold flex items-center gap-1.5 text-indigo-900">
                     <Sparkles className="w-4 h-4 text-indigo-600 shrink-0" />
-                    💻 로컬 컴퓨터에서 3초 만에 실행하는 방법
+                    💻 Quick Start Instructions
                   </p>
                   <ol className="list-decimal pl-5 space-y-1 text-[11px] text-indigo-900/80 leading-relaxed font-mono">
-                    <li>필수 라이브러리 설치: <span className="bg-indigo-100/80 px-1 py-0.5 rounded font-bold">pip install streamlit pandas matplotlib</span></li>
-                    <li>폴더에 <span className="bg-indigo-100/80 px-1 py-0.5 rounded font-bold">app.py</span> 파일을 만들고 아래 코드를 통째로 붙여넣습니다.</li>
-                    <li>터미널에서 명령어 입력: <span className="bg-indigo-100/80 px-1 py-0.5 rounded font-bold">streamlit run app.py</span></li>
+                    <li>Install required packages: <span className="bg-indigo-100/80 px-1 py-0.5 rounded font-bold">pip install streamlit pandas matplotlib</span></li>
+                    <li>Save the code below as <span className="bg-indigo-100/80 px-1 py-0.5 rounded font-bold">app.py</span></li>
+                    <li>Run in terminal: <span className="bg-indigo-100/80 px-1 py-0.5 rounded font-bold">streamlit run app.py</span></li>
                   </ol>
                 </div>
 
@@ -562,10 +562,10 @@ export default function App() {
             <div id="data-table-card" className="md:col-span-7 bg-white rounded-3xl border border-slate-200 shadow-2xs p-6 space-y-4">
               <div>
                 <h3 className="text-sm font-extrabold text-slate-800 font-display">
-                  📝 상세 섭취 및 노출 데이터 테이블
+                  📝 Detailed Intake & Exposure Data Table
                 </h3>
                 <p className="text-[11px] text-slate-400">
-                  농도 수치와 나의 섭취량을 기반으로 도출된 정확한 노출량 명세서
+                  Exact exposure quantification derived from food concentrations and your reported dietary intake
                 </p>
               </div>
 
@@ -573,11 +573,11 @@ export default function App() {
                 <table className="min-w-full divide-y divide-slate-100 text-left text-xs text-slate-700">
                   <thead className="bg-slate-50 text-slate-500 font-bold uppercase tracking-wider text-[9px]">
                     <tr>
-                      <th className="px-4 py-3">식품군</th>
-                      <th className="px-4 py-3 text-right">농도</th>
-                      <th className="px-4 py-3 text-right">나의 섭취량</th>
-                      <th className="px-4 py-3 text-right">주간 노출량 (입자)</th>
-                      <th className="px-4 py-3 text-right">점유율</th>
+                      <th className="px-4 py-3">Food Group</th>
+                      <th className="px-4 py-3 text-right">Concentration</th>
+                      <th className="px-4 py-3 text-right">Weekly Intake</th>
+                      <th className="px-4 py-3 text-right">Weekly Exposure (p/w)</th>
+                      <th className="px-4 py-3 text-right">Share (%)</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 font-medium">
@@ -587,7 +587,7 @@ export default function App() {
                         <tr key={item.key} className="hover:bg-slate-50/50 transition-colors">
                           <td className="px-4 py-3 flex items-center space-x-2">
                             <span className="w-1.5 h-3 rounded-xs shrink-0" style={{ backgroundColor: rowColor }}></span>
-                            <span className="font-extrabold text-slate-800">{item.name_kr}</span>
+                            <span className="font-extrabold text-slate-800">{item.name_en}</span>
                           </td>
                           <td className="px-4 py-3 text-right text-slate-400 font-mono text-[10px]">
                             {item.concentration} {item.concentrationUnit}
@@ -614,7 +614,7 @@ export default function App() {
               <div className="flex items-center space-x-2 text-emerald-900">
                 <ShieldCheck className="w-5 h-5 shrink-0 text-emerald-600" />
                 <h3 className="text-sm font-extrabold font-display">
-                  💡 일상 미세플라스틱 노출 절감 팁
+                  💡 Daily Microplastic Reduction Tips
                 </h3>
               </div>
 
@@ -625,10 +625,10 @@ export default function App() {
                       <span className="w-4 h-4 bg-emerald-100 text-emerald-700 text-[10px] font-mono rounded-full flex items-center justify-center shrink-0">
                         {idx + 1}
                       </span>
-                      {tip.title}
+                      {tip.title_en}
                     </h4>
                     <p className="text-[11px] text-slate-500 leading-relaxed pl-5">
-                      {tip.desc}
+                      {tip.desc_en}
                     </p>
                   </div>
                 ))}
@@ -657,7 +657,7 @@ export default function App() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
             </span>
-            📖 학술 연구 레퍼런스 (Scientific Academic Reference)
+            📖 Scientific Academic Reference
           </p>
           <div className="space-y-1.5 pl-3.5 border-l-2 border-indigo-300">
             <p className="font-bold text-slate-800 leading-normal text-xs sm:text-sm font-display">
@@ -680,18 +680,18 @@ export default function App() {
             </p>
           </div>
           <p className="text-[11px] text-slate-500 leading-normal pl-3.5">
-            💡 본 시뮬레이터는 위 공동 연구팀의 실제 대한민국 성인 식품별 미세플라스틱 평균 오염도 데이터(<code className="bg-slate-100 px-1 py-0.5 rounded font-mono text-slate-600 text-[10px]">MP_CONCENTRATION</code>) 및 노출 평가 산출식을 근간으로 제작되었습니다.
+            💡 This calculator simulator is built upon empirical contamination datasets (<code className="bg-slate-100 px-1 py-0.5 rounded font-mono text-slate-600 text-[10px]">MP_CONCENTRATION</code>) and exposure assessment formulas published by the research team above.
           </p>
         </div>
 
         <div className="space-y-1 pt-2">
-          <p className="font-bold text-slate-600">⚠️ 나의 주간 미세플라스틱 섭취량 계산기 MVP Dashboard</p>
-          <p>전국의 식생활 안전과 미세플라스틱 억제를 위한 연구 자료를 근거로 구성되었습니다.</p>
+          <p className="font-bold text-slate-600">⚠️ Weekly Microplastics Exposure Calculator MVP</p>
+          <p>Designed for environmental health awareness, food safety education, and dietary exposure assessment.</p>
         </div>
         
         <div className="flex items-center justify-center space-x-1 bg-slate-100 w-fit mx-auto px-2 py-1 rounded text-[10px] text-slate-500 border border-slate-200/50">
           <Database className="w-3 h-3" />
-          <span>Bento Grid Theme Enabled | Secure Offline Application</span>
+          <span>Bento Grid Theme Enabled | Secure Offline-Ready Application</span>
         </div>
       </footer>
     </div>
