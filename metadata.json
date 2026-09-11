@@ -1,0 +1,6 @@
+{
+  "name": "주간 미세플라스틱 노출량 계산기",
+  "description": "식품군별 주간 섭취량을 기반으로 미세플라스틱 섭취 노출량을 계산하고 시각화해 주는 편리한 툴입니다.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
