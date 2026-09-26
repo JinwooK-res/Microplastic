@@ -1,76 +1,113 @@
-# Weekly Microplastics Exposure Calculator
+# Microplastics Dietary Exposure Calculator
 
-An interactive dietary microplastics **exposure** calculator based on the deterministic parameters reported by Pham et al. (2023). The project includes a React dashboard, a Streamlit companion, and an optional Gemini-powered exposure explainer.
+An interactive dietary microplastics **exposure** calculator based on the deterministic parameters reported by Pham et al. (2023).
 
-> Pham, D. T., Kim, J., Lee, S.-H., Kim, J., Kim, D., Hong, S., Jung, J., & Kwon, J.-H. (2023). Analysis of microplastics in various foods and assessment of aggregate human exposure via food consumption in Korea. *Environmental Pollution*, 322, 121153. https://doi.org/10.1016/j.envpol.2023.121153
+The project reproduces the published exposure calculation in a transparent and testable form using a React dashboard, a Streamlit companion, and an optional Gemini-powered explainer.
 
-## Scientific scope
+> Pham, D. T., Kim, J., Lee, S.-H., Kim, J., Kim, D., Hong, S., Jung, J., & Kwon, J.-H. (2023). Analysis of microplastics in various foods and assessment of aggregate human exposure via food consumption in Korea. *Environmental Pollution*, 322, 121153.
+> https://doi.org/10.1016/j.envpol.2023.121153
 
-The default inputs reproduce the deterministic parameters for the ten calculation categories derived from the study's eight measured food types. Concentrations use the arithmetic means in Supplementary Table S14; liquid concentrations are expressed per liter and liquid intakes per liter.
+---
 
-| Category | Concentration | Mean weekly intake | Geometric-mean particle size |
-| --- | ---: | ---: | ---: |
-| Salt | 0.512 p/g | 17.2 g | 58.04 μm |
-| Soy sauce | 36.0 p/L | 0.0451 L | 76.88 μm |
-| Fish sauce | 0.95 p/g | 1.14 g | 111.04 μm |
-| Salted seafood | 5.30 p/g | 1.26 g | 103.98 μm |
-| Seaweed | 4.51 p/g | 5.43 g | 121.30 μm |
-| Beer | 11.4 p/L | 0.445 L | 99.98 μm |
-| Soft drinks | 2.50 p/L | 0.356 L | 82.09 μm |
-| Fruit drinks | 37.30 p/L | 0.183 L | 73.92 μm |
-| Bottled tea | 0.25 p/L | 0.147 L | 101.68 μm |
-| Honey | 0.25 p/g | 2.50 g | 72.27 μm |
+## What It Does
 
-Particle exposure is calculated as:
+The default inputs reproduce ten calculation categories derived from the eight measured food types reported in the study.
+
+The model explicitly separates:
+
+* microplastic concentration,
+* weekly food intake,
+* geometric-mean particle size, and
+* particle density.
+
+This allows the contribution of each parameter to the exposure estimate to be inspected directly.
+
+The default measured-food subtotal is approximately:
+
+* **56.13 particles/week**
+* **32.71 μg/week**
+
+This subtotal excludes fish, shellfish, and water and should not be directly compared with the paper's 13-category aggregate result.
+
+> This application estimates dietary exposure under the assumptions used in the source study. It does not establish individual health risk, causal health effects, or safe/harmful exposure thresholds.
+
+---
+
+## Calculation
+
+Particle-number exposure is calculated for each category as:
 
 ```text
 particles/week = concentration × weekly intake
 ```
 
-Mass is calculated separately for each category using Equation 2 of the paper:
+Particle mass is calculated using Equation 2 of the paper:
 
 ```text
 AMM (g/particle) = π × L³ × ρ / (6 × 10¹²)
+
 mass/week = particles/week × AMM
 ```
 
-where `L` is the category-specific geometric-mean particle size in μm and `ρ = 0.98 g/mL`. The earlier universal `0.002 mg/particle` and credit-card conversion have been removed.
+where:
 
-The default measured-food subtotal is approximately **56.13 particles/week** and **32.71 μg/week**. It must not be directly compared with the paper's 13-category aggregate result, which additionally includes fish, shellfish, and water.
+* `L` = category-specific geometric-mean particle size in μm
+* `ρ = 0.98 g/mL`
 
-> This application estimates dietary exposure under study-specific assumptions. It does not establish an individual health risk, causal health effect, or safe/harmful threshold.
+Mass is calculated independently for each category using its own particle-size parameter.
 
-## Run the React application
+The earlier universal `0.002 mg/particle` conversion and credit-card-equivalent comparison have been removed.
 
-Requirements: Node.js 20+ and npm.
+---
+
+## Run the React Application
+
+Requirements:
+
+* Node.js 20+
+* npm
 
 ```bash
-git clone https://github.com/JinwooK-res/Microplastic.git
-cd Microplastic
+git clone https://github.com/JinwooK-res/microplastics-exposure-calculator.git
+cd microplastics-exposure-calculator
 npm ci
 cp .env.example .env
 npm run dev
 ```
 
-Open `http://localhost:3000`.
+Open:
 
-Set a valid API key in `.env` to enable chat:
+```text
+http://localhost:3000
+```
+
+---
+
+## Optional Gemini Explainer
+
+Set a valid API key in `.env`:
 
 ```env
 GEMINI_API_KEY="your-gemini-api-key"
-GEMINI_MODEL="gemini-3.6-flash"
+GEMINI_MODEL="gemini-3.8-flash"
 ```
 
-The calculator works without Gemini; chat does not.
+The calculator works without Gemini.
 
-## Run the Streamlit companion
+The language-model component only explains calculator outputs and does not participate in the numerical exposure calculations.
+
+---
+
+## Streamlit Companion
 
 ```bash
 python -m pip install streamlit pandas
 streamlit run app.py
 ```
 
-## Quality checks
+---
+
+## Quality Checks
 
 ```bash
 npm run lint
@@ -78,15 +115,45 @@ npm test
 npm run build
 ```
 
-The calculation tests cover the paper's particle-mass equation, the default deterministic subtotal, and zero-intake behavior.
+Automated tests currently cover:
+
+* the particle-mass equation,
+* reproduction of the default deterministic subtotal, and
+* zero-intake behavior.
+
+---
 
 ## Limitations
 
-- The deterministic mode uses group-level arithmetic means and mean food intakes, not individual measurements.
-- The spherical-particle and uniform-density assumptions introduce uncertainty.
-- Preparation and cooking may change particle abundance.
-- The measured-food subtotal excludes fish, shellfish, water, inhalation, and other exposure routes.
-- The chatbot explains the calculator; it is not a medical or toxicological decision system.
+* The model uses group-level arithmetic mean concentrations and mean food-intake values.
+* Particle mass estimates assume spherical particles and a uniform density.
+* Preparation and cooking may alter particle abundance.
+* The current subtotal excludes fish, shellfish, water, inhalation, and other exposure routes.
+* The model reproduces a specific published exposure calculation and does not estimate toxicological effects or health risk.
+
+---
+
+## Future Development
+
+Possible future extensions include:
+
+* incorporating additional exposure studies,
+* comparing analytical methods and particle-size ranges,
+* harmonizing units and food categories,
+* structuring study metadata and uncertainty information, and
+* exploring controlled vocabularies, ontologies, or knowledge graphs for organizing exposure data.
+
+These features are not implemented in the current version.
+
+---
+
+## Intended Use
+
+This repository is a personal research and software-development project intended for research exploration, reproducibility, and computational prototyping.
+
+It does not represent the official views or activities of Korea Conformity Laboratories (KCL).
+
+---
 
 ## License
 
