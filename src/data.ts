@@ -9,152 +9,209 @@ export const MP_CONCENTRATION: Record<FoodKey, FoodConfig> = {
   salt: {
     name_kr: "소금",
     name_en: "Salt",
-    value: 0.22,
+    value: 0.512,
     unit: "p/g",
+    medianValue: 0.22,
+    particleSizeGeomeanUm: 58.04,
+    sourceStatistic: "arithmetic mean",
+    sourceTable: "Table S14",
     description: "천일염, 천연 암염 및 정제 소금에 함유된 미세플라스틱",
     description_en: "Microplastics found in sea salt, rock salt, and refined table salt",
-    defaultVal: 10,
+    defaultVal: 17.2,
     min: 0,
     max: 100,
-    step: 1
+    step: 0.1
   },
   fish_sauce: {
     name_kr: "액젓",
     name_en: "Fish Sauce",
-    value: 0.60,
+    value: 0.95,
     unit: "p/g",
+    medianValue: 0.60,
+    particleSizeGeomeanUm: 111.04,
+    sourceStatistic: "arithmetic mean",
+    sourceTable: "Table S14",
     description: "멸치액젓, 까나리액젓 등 발효 어장류",
     description_en: "Fermented fish sauces such as anchovy and sand lance sauces",
-    defaultVal: 5,
+    defaultVal: 1.14,
     min: 0,
     max: 100,
-    step: 1
+    step: 0.01
   },
   salted_seafood: {
     name_kr: "젓갈",
     name_en: "Salted Fermented Seafood",
     value: 5.30,
     unit: "p/g",
+    medianValue: 5.30,
+    particleSizeGeomeanUm: 103.98,
+    sourceStatistic: "arithmetic mean",
+    sourceTable: "Table S14",
     description: "오징어젓, 낙지젓, 명란젓 등 해산물 염장 가공품",
     description_en: "Salted seafood delicacies including salted squid, octopus, and pollock roe (Jeotgal)",
-    defaultVal: 15,
+    defaultVal: 1.26,
     min: 0,
     max: 200,
-    step: 5
+    step: 0.01
   },
   seaweed: {
     name_kr: "해조류",
     name_en: "Seaweed",
-    value: 4.00,
+    value: 4.51,
     unit: "p/g",
+    medianValue: 4.00,
+    particleSizeGeomeanUm: 121.30,
+    sourceStatistic: "arithmetic mean",
+    sourceTable: "Table S14",
     description: "미역, 다시마, 김 등 바다에서 채취한 다당류 식물군",
     description_en: "Edible sea vegetables including brown seaweed (Wakame), kelp, and laver (Gim)",
-    defaultVal: 20,
+    defaultVal: 5.43,
     min: 0,
     max: 300,
-    step: 5
+    step: 0.01
   },
   honey: {
     name_kr: "꿀",
     name_en: "Honey",
-    value: 0.18,
+    value: 0.25,
     unit: "p/g",
+    medianValue: 0.18,
+    particleSizeGeomeanUm: 72.27,
+    sourceStatistic: "arithmetic mean",
+    sourceTable: "Table S14",
     description: "벌이 수집하는 과정 및 대기 중에서 혼입되는 미세 입자",
     description_en: "Natural honey containing particles accumulated during foraging and atmospheric settling",
-    defaultVal: 10,
+    defaultVal: 2.50,
     min: 0,
     max: 100,
-    step: 1
+    step: 0.01
   },
   soy_sauce: {
     name_kr: "간장",
     name_en: "Soy Sauce",
-    value: 30.0,
+    value: 36.0,
     unit: "p/L",
+    medianValue: 30.0,
+    particleSizeGeomeanUm: 76.88,
+    sourceStatistic: "arithmetic mean",
+    sourceTable: "Table S14",
     description: "대량 유통 및 조미 과정에서 발견되는 액상 장류",
     description_en: "Liquid brewed and blended soy sauce seasonings",
-    defaultVal: 0.05,
+    defaultVal: 0.0451,
     min: 0,
     max: 2.0,
-    step: 0.01
+    step: 0.0001
   },
   beer: {
     name_kr: "맥주",
     name_en: "Beer",
-    value: 9.0,
+    value: 11.4,
     unit: "p/L",
+    medianValue: 9.0,
+    particleSizeGeomeanUm: 99.98,
+    sourceStatistic: "arithmetic mean",
+    sourceTable: "Table S14",
     description: "양조 용수 및 병입 과정에서 미량 검출되는 입자",
     description_en: "Commercial beers with trace particles from brewing water and packaging",
-    defaultVal: 1.5,
+    defaultVal: 0.445,
     min: 0,
     max: 10.0,
-    step: 0.1
+    step: 0.001
   },
-  beverage: {
-    name_kr: "음료",
-    name_en: "Bottled Beverages",
-    value: 1.75,
+  soft_drink: {
+    name_kr: "탄산·청량음료",
+    name_en: "Soft Drinks",
+    value: 2.50,
     unit: "p/L",
-    description: "생수 및 페트병입 탄산음료, 주스 가공품류",
-    description_en: "Bottled mineral water, carbonated soft drinks, and packaged juices",
-    defaultVal: 2.0,
+    medianValue: 2.25,
+    particleSizeGeomeanUm: 82.09,
+    sourceStatistic: "arithmetic mean",
+    sourceTable: "Table S14",
+    description: "논문에서 분석한 탄산음료 및 청량음료",
+    description_en: "Carbonated and other soft drinks analyzed in the study",
+    defaultVal: 0.356,
     min: 0,
-    max: 15.0,
-    step: 0.1
+    max: 10.0,
+    step: 0.001
+  },
+  fruit_drink: {
+    name_kr: "과일음료",
+    name_en: "Fruit Drinks",
+    value: 37.30,
+    unit: "p/L",
+    medianValue: 29.30,
+    particleSizeGeomeanUm: 73.92,
+    sourceStatistic: "arithmetic mean",
+    sourceTable: "Table S14",
+    description: "과육 또는 과즙을 포함한 포장 과일음료",
+    description_en: "Packaged fruit drinks containing juice or pulp",
+    defaultVal: 0.183,
+    min: 0,
+    max: 10.0,
+    step: 0.001
+  },
+  bottled_tea: {
+    name_kr: "병입 차음료",
+    name_en: "Bottled Tea",
+    value: 0.25,
+    unit: "p/L",
+    medianValue: 0,
+    particleSizeGeomeanUm: 101.68,
+    sourceStatistic: "arithmetic mean",
+    sourceTable: "Table S14",
+    description: "논문에서 분석한 병입 액상 차음료",
+    description_en: "Ready-to-drink bottled tea analyzed in the study",
+    defaultVal: 0.147,
+    min: 0,
+    max: 10.0,
+    step: 0.001
   }
 };
 
 export const INITIAL_INTAKES: UserIntakes = {
-  salt: 10,
-  fish_sauce: 5,
-  salted_seafood: 15,
-  seaweed: 20,
-  honey: 10,
-  soy_sauce: 0.05,
-  beer: 1.5,
-  beverage: 2.0
+  salt: 17.2,
+  fish_sauce: 1.14,
+  salted_seafood: 1.26,
+  seaweed: 5.43,
+  honey: 2.50,
+  soy_sauce: 0.0451,
+  beer: 0.445,
+  soft_drink: 0.356,
+  fruit_drink: 0.183,
+  bottled_tea: 0.147
 };
 
 export const MICROPLASTIC_TIPS = [
   {
-    title_kr: "정제/가공 소금 활용하기",
-    title_en: "Opt for Refined or Rock Salt",
-    desc_kr: "천일염 대신 상대적으로 가공이나 여과 수준이 높은 암염이나 정제 소금을 사용하면 미세플라스틱 섭취를 크게 줄일 수 있습니다.",
-    desc_en: "Using well-filtered rock salt or refined table salt instead of raw sea salt can significantly lower your weekly microplastic ingestion."
-  },
-  {
-    title_kr: "페트병 대신 텀블러 사용하기",
-    title_en: "Use Reusable Stainless Steel/Glass Tumblers",
-    desc_kr: "일회용 생수병이나 플라스틱 용기에 든 음료 대신 유리병에 든 제품이나 정수기 필터를 거친 물을 스테인리스/유리 텀블러에 담아 마시는 것이 효과적입니다.",
-    desc_en: "Drinking filtered tap water from stainless steel or glass bottles instead of single-use PET bottled beverages effectively eliminates plastic leaching."
+    title_kr: "소금 유형별 차이 확인",
+    title_en: "Interpret Salt Types Separately",
+    desc_kr: "해당 연구에서는 천일염의 중앙값이 죽염·정제염보다 높았지만, 제품 수와 제조공정의 차이를 고려해 개인 위험으로 단정하지 않아야 합니다.",
+    desc_en: "Sea salt had a higher median count than bamboo and refined salts in this dataset, but product and process differences should not be interpreted as an individual health-risk threshold."
   },
   {
     title_kr: "해조류 조리 전 철저한 세척",
     title_en: "Rinse Dried Seaweed Thoroughly Before Cooking",
     desc_kr: "미역, 다시마 등의 해조류는 물에 씻는 과정에서 표면에 묻어 있던 상당수의 미세플라스틱 입자가 씻겨 나가므로, 흐르는 물에 여러 번 씻는 것이 아주 중요합니다.",
-    desc_en: "Rinsing dried seaweeds (kelp, wakame) 2–3 times under running tap water washes away 70% to 84% of adhering microplastic particles."
-  },
-  {
-    title_kr: "플라스틱 주방용품 멀리하기",
-    title_en: "Minimize Heated Plastic Cookware",
-    desc_kr: "뜨거운 국이나 찌개를 조리할 때 플라스틱 국자나 도구를 사용하지 않고, 흠집이 많이 난 플라스틱 도마 대신 친환경 나무/유리 도마를 사용하는 것이 간접 노출을 줄여줍니다.",
-    desc_en: "Avoid stirring boiling soups with plastic utensils, and replace scratched plastic cutting boards with solid wood or glass boards to cut down physical abrasion particles."
+    desc_en: "In the study's preparation experiment, washing dried seaweed and kelp twice reduced measured particles by 70% and 84%, respectively; results may not generalize to every product."
   }
 ];
 
 export const PYTHON_STREAMLIT_CODE = `import streamlit as st
 import pandas as pd
 
-# 1. Dataset Configuration (Scientific Benchmark Data from Pham et al., 2023)
+# Deterministic parameters from Table S14 of Pham et al. (2023).
+# Liquid concentrations are expressed per liter and liquid intakes per liter.
 MP_CONCENTRATION = {
-    "salt": {"name": "Salt", "value": 0.22, "unit": "p/g", "desc": "Microplastics in sea salt, rock salt, and refined salt"},
-    "fish_sauce": {"name": "Fish Sauce", "value": 0.60, "unit": "p/g", "desc": "Fermented fish seasoning sauces"},
-    "salted_seafood": {"name": "Salted Seafood", "value": 5.30, "unit": "p/g", "desc": "Salted fermented seafood products (Jeotgal)"},
-    "seaweed": {"name": "Seaweed", "value": 4.00, "unit": "p/g", "desc": "Dried kelp, brown seaweed (Wakame), and laver (Gim)"}, 
-    "honey": {"name": "Honey", "value": 0.18, "unit": "p/g", "desc": "Honey with airborne and foraging micro-particulates"},
-    "soy_sauce": {"name": "Soy Sauce", "value": 30.0, "unit": "p/L", "desc": "Liquid brewed soy sauce seasoning"},
-    "beer": {"name": "Beer", "value": 9.00, "unit": "p/L", "desc": "Bottled & canned commercial brewed beers"},
-    "beverage": {"name": "Bottled Beverages", "value": 1.75, "unit": "p/L", "desc": "Bottled spring water, carbonated soft drinks, juices"}
+    "salt": {"name": "Salt", "value": 0.512, "unit": "p/g", "size_um": 58.04, "default": 17.2, "desc": "Table salt"},
+    "fish_sauce": {"name": "Fish Sauce", "value": 0.95, "unit": "p/g", "size_um": 111.04, "default": 1.14, "desc": "Fermented fish sauces"},
+    "salted_seafood": {"name": "Salted Seafood", "value": 5.30, "unit": "p/g", "size_um": 103.98, "default": 1.26, "desc": "Salted seafood products"},
+    "seaweed": {"name": "Seaweed", "value": 4.51, "unit": "p/g", "size_um": 121.30, "default": 5.43, "desc": "Kelp, seaweed, and laver"},
+    "honey": {"name": "Honey", "value": 0.25, "unit": "p/g", "size_um": 72.27, "default": 2.50, "desc": "Honey products"},
+    "soy_sauce": {"name": "Soy Sauce", "value": 36.0, "unit": "p/L", "size_um": 76.88, "default": 0.0451, "desc": "Soy sauce products"},
+    "beer": {"name": "Beer", "value": 11.4, "unit": "p/L", "size_um": 99.98, "default": 0.445, "desc": "Domestic and imported beer"},
+    "soft_drink": {"name": "Soft Drinks", "value": 2.50, "unit": "p/L", "size_um": 82.09, "default": 0.356, "desc": "Carbonated and soft drinks"},
+    "fruit_drink": {"name": "Fruit Drinks", "value": 37.30, "unit": "p/L", "size_um": 73.92, "default": 0.183, "desc": "Packaged fruit drinks"},
+    "bottled_tea": {"name": "Bottled Tea", "value": 0.25, "unit": "p/L", "size_um": 101.68, "default": 0.147, "desc": "Ready-to-drink bottled tea"}
 }
 
 # Streamlit Page Config
@@ -207,27 +264,27 @@ with col_left:
         st.markdown("#### 🌾 Solid Foods (grams/week)")
         user_inputs["salt"] = st.slider(
             "🧂 Salt (g/week)",
-            min_value=0.0, max_value=100.0, value=10.0, step=1.0,
+            min_value=0.0, max_value=100.0, value=17.2, step=0.1,
             help=MP_CONCENTRATION["salt"]["desc"]
         )
         user_inputs["fish_sauce"] = st.slider(
             "🐟 Fish Sauce (g/week)",
-            min_value=0.0, max_value=100.0, value=5.0, step=1.0,
+            min_value=0.0, max_value=100.0, value=1.14, step=0.01,
             help=MP_CONCENTRATION["fish_sauce"]["desc"]
         )
         user_inputs["salted_seafood"] = st.slider(
             "🦐 Salted Seafood (g/week)",
-            min_value=0.0, max_value=200.0, value=15.0, step=5.0,
+            min_value=0.0, max_value=200.0, value=1.26, step=0.01,
             help=MP_CONCENTRATION["salted_seafood"]["desc"]
         )
         user_inputs["seaweed"] = st.slider(
             "🌿 Seaweed (g/week)",
-            min_value=0.0, max_value=300.0, value=20.0, step=5.0,
+            min_value=0.0, max_value=300.0, value=5.43, step=0.01,
             help=MP_CONCENTRATION["seaweed"]["desc"]
         )
         user_inputs["honey"] = st.slider(
             "🍯 Honey (g/week)",
-            min_value=0.0, max_value=100.0, value=10.0, step=1.0,
+            min_value=0.0, max_value=100.0, value=2.50, step=0.01,
             help=MP_CONCENTRATION["honey"]["desc"]
         )
 
@@ -235,29 +292,40 @@ with col_left:
         st.markdown("#### 🍹 Liquid Foods (liters/week)")
         user_inputs["soy_sauce"] = st.slider(
             "🧴 Soy Sauce (L/week)",
-            min_value=0.0, max_value=2.0, value=0.05, step=0.01,
+            min_value=0.0, max_value=2.0, value=0.0451, step=0.0001,
             help=MP_CONCENTRATION["soy_sauce"]["desc"]
         )
         user_inputs["beer"] = st.slider(
             "🍺 Beer (L/week)",
-            min_value=0.0, max_value=10.0, value=1.5, step=0.1,
+            min_value=0.0, max_value=10.0, value=0.445, step=0.001,
             help=MP_CONCENTRATION["beer"]["desc"]
         )
-        user_inputs["beverage"] = st.slider(
-            "🥤 Bottled Beverages (L/week)",
-            min_value=0.0, max_value=15.0, value=2.0, step=0.1,
-            help=MP_CONCENTRATION["beverage"]["desc"]
+        user_inputs["soft_drink"] = st.slider(
+            "🥤 Soft Drinks (L/week)", 0.0, 10.0, 0.356, 0.001,
+            help=MP_CONCENTRATION["soft_drink"]["desc"]
+        )
+        user_inputs["fruit_drink"] = st.slider(
+            "🧃 Fruit Drinks (L/week)", 0.0, 10.0, 0.183, 0.001,
+            help=MP_CONCENTRATION["fruit_drink"]["desc"]
+        )
+        user_inputs["bottled_tea"] = st.slider(
+            "🍵 Bottled Tea (L/week)", 0.0, 10.0, 0.147, 0.001,
+            help=MP_CONCENTRATION["bottled_tea"]["desc"]
         )
 
 # 3. Calculation Logic
 exposure_data = []
 total_particles = 0.0
+total_mass_ug = 0.0
 
 for key, config in MP_CONCENTRATION.items():
     intake = user_inputs[key]
     concentration = config["value"]
     exposure = concentration * intake
+    particle_mass_ug = 3.141592653589793 * config["size_um"] ** 3 * 0.98 / (6 * 10**12) * 10**6
+    mass_ug = exposure * particle_mass_ug
     total_particles += exposure
+    total_mass_ug += mass_ug
     
     exposure_data.append({
         "key": key,
@@ -267,6 +335,7 @@ for key, config in MP_CONCENTRATION.items():
         "Concentration": concentration,
         "Conc Unit": config["unit"],
         "Weekly Exposure (particles)": exposure
+        ,"Estimated Mass (ug)": mass_ug
     })
 
 df = pd.DataFrame(exposure_data)
@@ -274,10 +343,6 @@ if total_particles > 0:
     df["Share (%)"] = (df["Weekly Exposure (particles)"] / total_particles) * 100
 else:
     df["Share (%)"] = 0.0
-
-# Approx weight: ~0.002 mg per typical particle
-plastic_weight_mg = total_particles * 0.002
-credit_card_fraction = plastic_weight_mg / 5000.0  # 1 credit card = 5g (5,000 mg)
 
 # Sort descending
 df_sorted = df.sort_values(by="Weekly Exposure (particles)", ascending=False)
@@ -300,17 +365,9 @@ with col_right:
             Estimated microplastic particles ingested directly through monitored food groups during the week.
         </p>
         <hr style="border-color: #1e293b; margin: 20px 0 15px 0;">
-        <div style="display: flex; justify-content: space-around; text-align: center;">
-            <div>
-                <span style="color: #64748b; font-size: 10px; font-weight: bold; text-transform: uppercase;">Estimated Mass</span>
-                <span style="color: #e2e8f0; font-size: 14px; font-weight: 900; display: block; margin-top: 3px;">~{plastic_weight_mg:.2f} mg</span>
-            </div>
-            <div style="border-left: 1px solid #1e293b;"></div>
-            <div>
-                <span style="color: #64748b; font-size: 10px; font-weight: bold; text-transform: uppercase;">Annual Card Eqv.</span>
-                <span style="color: #fbbf24; font-size: 14px; font-weight: 900; display: block; margin-top: 3px;">~{(credit_card_fraction * 52):.2f} card/yr</span>
-            </div>
-        </div>
+        <span style="color: #64748b; font-size: 10px; font-weight: bold; text-transform: uppercase;">Estimated Mass</span>
+        <span style="color: #e2e8f0; font-size: 14px; font-weight: 900; display: block; margin-top: 3px;">~{total_mass_ug:.2f} μg/week</span>
+        <span style="color: #64748b; font-size: 10px; display: block; margin-top: 3px;">Food-specific size; sphere and 0.98 g/mL assumptions</span>
     </div>
     """, unsafe_allow_html=True)
     
@@ -344,11 +401,11 @@ with col_bottom_left:
 with col_bottom_right:
     st.subheader("💡 Practical Exposure Reduction Guidelines")
     st.success("""
-    1. **Choose Refined/Rock Salt**: High-filtration rock salt or refined vacuum salt has far fewer particles than unrefined sea salt.
-    2. **Switch from PET to Tumblers**: Drink filtered water from glass or stainless steel bottles to avoid plastic container leaching.
-    3. **Rinse Dried Seaweed**: Washing dried seaweed (Wakame, Kelp) 2–3 times under running tap water removes 70–84% of microplastics.
-    4. **Avoid Heated Plastic Utensils**: Replace scratched plastic cutting boards and plastic ladles with wood or stainless steel.
+    1. **Interpret salt types separately**: Sea salt had a higher median count than bamboo and refined salts in this dataset; this is not a health-risk threshold.
+    2. **Rinse dried seaweed**: In this experiment, washing dried seaweed and kelp twice reduced measured particles by 70% and 84%, respectively. Results may not generalize to every product.
     """)
+
+st.info("This tool estimates dietary exposure under study-specific assumptions. It does not determine individual health risk or a safe/harmful threshold.")
 
 # Academic Research Citation
 st.markdown("""

@@ -12,16 +12,14 @@ interface ChatMessage {
 
 interface ExposureChatbotProps {
   totalExposure: number;
-  plasticWeightMg: number;
-  creditCardFraction: number;
+  totalMassMicrograms: number;
   worstFood?: ExposureResult | null;
   results: ExposureResult[];
 }
 
 export const ExposureChatbot: React.FC<ExposureChatbotProps> = ({
   totalExposure,
-  plasticWeightMg,
-  creditCardFraction,
+  totalMassMicrograms,
   worstFood,
   results,
 }) => {
@@ -33,14 +31,9 @@ export const ExposureChatbot: React.FC<ExposureChatbotProps> = ({
   // Initialize with tailored welcome message based on current inputs
   useEffect(() => {
     const timeStr = new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
-    const initialText = `Hello! I am your **Dietary Microplastic Exposure AI Advisor**. 🤖
+    const initialText = `Hello! I am your **Dietary Microplastic Exposure Explainer**. 🤖
 
-Based on your current dietary selections:
-- 📊 **Total Weekly Ingestion**: **${totalExposure.toLocaleString("en-US", { minimumFractionDigits: 1, maximumFractionDigits: 1 })} particles/week**
-- ⚖️ **Estimated Mass**: ~**${plasticWeightMg.toFixed(2)} mg** (annual equivalent: ~${(creditCardFraction * 52).toFixed(2)} credit cards/year)
-- ⚠️ **Primary Contributor**: **${worstFood ? `${worstFood.name_en} (${worstFood.percentage.toFixed(1)}%)` : "None"}**
-
-Feel free to ask about the real-world health implications of your score, comparisons against the empirical Korean adult baseline in **Pham et al. (2023)**, or practical kitchen washing and cooking tips to reduce microplastic intake!`;
+I can explain the current particle-count and particle-size-based mass estimates, the assumptions used in **Pham et al. (2023)**, and evidence-supported exposure-reduction scenarios. This calculator estimates **dietary exposure**, not individual health risk.`;
 
     setMessages([
       {
@@ -85,8 +78,7 @@ Feel free to ask about the real-world health implications of your score, compari
 
       const contextPayload = {
         totalExposure: totalExposure.toFixed(2),
-        plasticWeightMg: plasticWeightMg.toFixed(2),
-        creditCardFraction: (creditCardFraction * 52).toFixed(2),
+        totalMassMicrograms: totalMassMicrograms.toFixed(2),
         worstFood: worstFood
           ? {
               name_en: worstFood.name_en,
@@ -121,6 +113,9 @@ Feel free to ask about the real-world health implications of your score, compari
       });
 
       const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "The server could not generate a response.");
+      }
       const replyText = data.reply || "Failed to retrieve a response. Please try again shortly.";
 
       const aiMsg: ChatMessage = {
@@ -159,7 +154,7 @@ Feel free to ask about the real-world health implications of your score, compari
 
   const QUICK_QUESTIONS = [
     "Is my calculated exposure higher than the average adult baseline?",
-    worstFood ? `How can I significantly reduce exposure from [${worstFood.name_en}]?` : "Which foods pose the highest risk of microplastics?",
+    worstFood ? `How can I reduce estimated exposure from [${worstFood.name_en}]?` : "Which foods contribute most to estimated exposure?",
     "How does this compare to the findings in Pham et al. (2023)?",
     "Does rinsing dried seaweed or cooking in glass actually remove microplastics?",
   ];
@@ -178,7 +173,7 @@ Feel free to ask about the real-world health implications of your score, compari
                 AI Exposure Analysis & Scientific Advisor
               </h3>
               <span className="bg-amber-400/10 text-amber-400 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-400/20">
-                Gemini 3.8 Flash
+                Gemini 3.6 Flash
               </span>
             </div>
             <p className="text-[11px] text-slate-400">
