@@ -9,7 +9,7 @@ dotenv.config();
 const app = express();
 const PORT = 3000;
 
-app.use(express.json());
+app.use(express.json({ limit: "32kb" }));
 
 // Lazy-initialized Gemini AI client
 let aiClient: GoogleGenAI | null = null;
@@ -45,14 +45,16 @@ app.post("/api/chat", async (req, res) => {
     if (!message || typeof message !== "string") {
       return res.status(400).json({ error: "Message is required." });
     }
+    if (message.length > 2000) {
+      return res.status(400).json({ error: "Message must be 2,000 characters or fewer." });
+    }
 
     // Prepare system instructions with calculation context & academic paper references
     const contextSummary = context
       ? `
 [Current User's Weekly Microplastic Intake Calculation Results]
 - Estimated Total Weekly Intake: ${context.totalExposure ?? "0"} particles/week
-- Estimated Total Weight: ~${context.plasticWeightMg ?? "0"} mg/week
-- Annual Credit Card Equivalent: ~${context.creditCardFraction ?? "0"} cards/year
+- Estimated Total Mass: ~${context.totalMassMicrograms ?? "0"} μg/week
 - Highest Contributing Food Category: ${context.worstFood?.name_en || context.worstFood?.name_kr || "None"} (~${context.worstFood?.percentage ?? 0}%)
 - Detailed Intake & Exposure Breakdown by Food Group:
 ${
@@ -70,23 +72,24 @@ ${
 - Paper: "Analysis of microplastics in various foods and assessment of aggregate human exposure via food consumption in Korea" (Environmental Pollution 322 (2023) 121153)
 - Authors: Dat Thanh Pham, Jinwoo Kim, Sang-Hwa Lee, Juyang Kim, Dowoon Kim, Soonki Hong, Jaehak Jung, Jung-Hwan Kwon (Korea University, FITI Testing & Research Institute, KASTIS)
 - Key Research Findings:
-  1. Measured empirical microplastic contamination concentrations across 8 staple food groups in Korea (salt, soy sauce, fish sauce, salted fermented seafood, seaweed, honey, beer, bottled beverages).
-  2. The calculated average weekly microplastic intake for a Korean adult ranges between 1.4×10^-4 to 3.1×10^-4 g/week (~0.14 to 0.31 mg/week).
-  3. Sensationalized media claims such as "eating a credit card's worth of plastic (5g) every week" stem from extreme assumptions and outliers; rigorous empirical dietary measurements show actual mass intake is orders of magnitude lower.
-  4. Rinsing dried seaweed (Wakame, Kelp) 2 to 3 times thoroughly under running tap water before cooking eliminates 70% to 84% of adhered microplastic particles.
+  1. Measured empirical microplastic contamination across eight food types. The calculator represents beverages as soft drinks, fruit drinks, and bottled tea, producing ten calculation categories.
+  2. The paper's aggregate deterministic and Monte Carlo estimates were 139.9 and 305.6 μg/week, respectively, across 13 categories including fish, shellfish, and water. Do not directly treat those values as a matched baseline for this calculator's ten categories.
+  3. Mass is estimated separately for each category from its geometric-mean particle size, assuming spherical particles and a density of 0.98 g/mL. It is not calculated using a universal mass-per-particle factor.
+  4. In the study's preparation experiment, washing dried seaweed and kelp twice reduced measured particle counts by 70% and 84%, respectively. Do not generalize this result to every product without qualification.
   5. The primary plastic polymer types identified were Polyethylene (PE), Polypropylene (PP), and PET, predominantly in small particle sizes below 300 μm (with a high frequency between 45–99 μm).
 `
       : "[No calculation data available]";
 
     const systemInstruction = `You are a scientific AI Environmental Health & Dietary Microplastic Exposure Advisor.
-Your role is to clearly, objectively, and encouragingly explain the user's weekly calculated microplastic exposure based on academic research and empirical measurements.
+Your role is to clearly and objectively explain the user's estimated weekly dietary microplastic exposure based on academic research and empirical measurements.
 
 Strictly adhere to the following guidelines:
-1. Provide personalized explanations grounded in the user's active calculation figures (total particles/week, estimated mg mass, and their top exposure vectors).
-2. Ground all toxicological and exposure context in the scientific findings of Pham et al. (2023), "Analysis of microplastics in various foods and assessment of aggregate human exposure via food consumption in Korea" (Environmental Pollution 322:121153).
-3. Put risk into objective perspective: clarify that the sensationalized "eating 1 credit card (5 grams) per week" statistic was an inflated estimate from early speculative models, whereas peer-reviewed empirical measurements place actual weekly intake in the hundreds of micrograms.
-4. Highlight the single highest dietary contributor in the user's current settings, and provide practical, evidence-based reduction tips (e.g., washing dried seaweed, selecting vacuum-refined table/rock salt, avoiding heating food in disposable plastics, using reusable stainless/glass bottles).
-5. Respond in clear, professional, fluent English. Format answers with clean Markdown (bold metrics, concise bullet points, and scannable paragraphs).`;
+1. Use the active calculation figures: total particles/week, particle-size-based mass, and category contributions.
+2. Treat Pham et al. (2023) as an exposure-assessment source, not as evidence of a human dose-response relationship or a clinical risk threshold.
+3. Explicitly state that the calculator cannot determine whether an individual's exposure is safe, harmful, or causally linked to a health outcome.
+4. Distinguish the ten measured-food calculation categories from the paper's 13-category aggregate estimate.
+5. Only recommend reduction measures directly supported by the cited study, such as washing dried seaweed/kelp. Label broader advice as general precautionary guidance.
+6. Respond in clear, professional, fluent English with concise Markdown.`;
 
     let ai;
     try {
@@ -123,7 +126,7 @@ Strictly adhere to the following guidelines:
     });
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.8-flash",
+      model: process.env.GEMINI_MODEL || "gemini-3.6-flash",
       contents: contents,
       config: {
         systemInstruction,
@@ -137,7 +140,6 @@ Strictly adhere to the following guidelines:
     console.error("Gemini API error:", error);
     return res.status(500).json({
       error: "Gemini API 호출 중 오류가 발생했습니다.",
-      details: error?.message || String(error),
     });
   }
 });

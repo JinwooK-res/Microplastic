@@ -38,6 +38,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { MP_CONCENTRATION, INITIAL_INTAKES, MICROPLASTIC_TIPS, PYTHON_STREAMLIT_CODE } from "./data";
 import { FoodKey, ExposureResult } from "./types";
 import { ExposureChatbot } from "./components/ExposureChatbot";
+import { calculateExposure } from "./calculations";
 
 export default function App() {
   const [intakes, setIntakes] = useState(INITIAL_INTAKES);
@@ -65,35 +66,7 @@ export default function App() {
 
   // Calculate results
   const results = useMemo<ExposureResult[]>(() => {
-    const calculated: ExposureResult[] = [];
-    let totalExposure = 0;
-
-    // Calculate individual exposures and total
-    Object.keys(MP_CONCENTRATION).forEach((k) => {
-      const key = k as FoodKey;
-      const config = MP_CONCENTRATION[key];
-      const intake = intakes[key];
-      const exposure = config.value * intake;
-      totalExposure += exposure;
-
-      calculated.push({
-        key,
-        name_kr: config.name_kr,
-        name_en: config.name_en,
-        intake,
-        unit: config.unit === "p/g" ? "g" : "L",
-        concentration: config.value,
-        concentrationUnit: config.unit,
-        exposure,
-        percentage: 0, // calculated later
-      });
-    });
-
-    // Calculate percentages
-    return calculated.map((item) => ({
-      ...item,
-      percentage: totalExposure > 0 ? (item.exposure / totalExposure) * 100 : 0,
-    }));
+    return calculateExposure(MP_CONCENTRATION, intakes);
   }, [intakes]);
 
   // Total exposure count
@@ -114,17 +87,9 @@ export default function App() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Equivalent to credit cards or objects
-  // Researchers estimate a weekly intake of ~2,000 particles is about 5g of plastic (equivalent to 1 credit card weight).
-  const plasticWeightMg = useMemo(() => {
-    // Standard approximation: 1 particle = ~0.002 mg for educational illustration.
-    return totalExposure * 0.002;
-  }, [totalExposure]);
-
-  const creditCardFraction = useMemo(() => {
-    // 1 credit card is 5000 mg (5 grams)
-    return plasticWeightMg / 5000;
-  }, [plasticWeightMg]);
+  const totalMassMicrograms = useMemo(() => {
+    return results.reduce((sum, item) => sum + item.massMicrograms, 0);
+  }, [results]);
 
   // Chart data format
   const barChartData = useMemo(() => {
@@ -160,7 +125,9 @@ export default function App() {
     honey: "#f59e0b", // Amber
     soy_sauce: "#8b5cf6", // Violet
     beer: "#ef4444", // Red
-    beverage: "#06b6d4" // Cyan
+    soft_drink: "#06b6d4", // Cyan
+    fruit_drink: "#f97316", // Orange
+    bottled_tea: "#14b8a6" // Teal
   };
 
   return (
@@ -225,7 +192,7 @@ export default function App() {
             </p>
           </div>
           <div className="text-right text-slate-400 text-xs italic font-medium bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200/60 self-stretch md:self-auto flex items-center justify-center">
-            Data Model: MP_CONCENTRATION Standards (Pham et al., 2023)
+            Deterministic model: arithmetic means + KNHANES intake (Pham et al., 2023)
           </div>
         </div>
 
@@ -249,7 +216,7 @@ export default function App() {
                         Weekly Dietary Intake Settings
                       </h3>
                       <p className="text-xs text-slate-500">
-                        Adjust your consumption for 8 staple categories (check grams vs. liters)
+                        Adjust ten calculation categories from the eight food types (check grams vs. liters)
                       </p>
                     </div>
                     <button
@@ -279,7 +246,9 @@ export default function App() {
                         honey: "🍯",
                         soy_sauce: "🧴",
                         beer: "🍺",
-                        beverage: "🥤"
+                        soft_drink: "🥤",
+                        fruit_drink: "🧃",
+                        bottled_tea: "🍵"
                       };
 
                       return (
@@ -294,7 +263,7 @@ export default function App() {
                               {food.name_en}
                             </span>
                             <span className="text-[10px] text-slate-400 font-mono bg-slate-50 px-2 py-0.5 rounded-full border border-slate-100">
-                              {food.value} {food.unit}
+                              mean {food.value} {food.unit}
                             </span>
                           </div>
 
@@ -364,23 +333,17 @@ export default function App() {
                   </div>
 
                   <p className="text-center text-slate-400 text-xs leading-relaxed max-w-sm">
-                    Estimated total count of microplastic particles ingested weekly through the 8 staple food categories.
+                    Estimated weekly intake through ten calculation categories from the eight food types measured in the study.
                   </p>
 
-                  {/* Equivalent metrics comparison */}
-                  <div className="w-full grid grid-cols-2 gap-4 pt-4 border-t border-slate-800">
-                    <div className="text-center border-r border-slate-800/80 pr-2">
-                      <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Estimated Mass</span>
-                      <span className="text-sm font-black text-slate-200 block mt-0.5">
-                        ~{plasticWeightMg.toFixed(2)} mg
-                      </span>
-                    </div>
-                    <div className="text-center pl-2">
-                      <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Credit Card Eq.</span>
-                      <span className="text-sm font-black text-amber-400 block mt-0.5">
-                        ~{(creditCardFraction * 52).toFixed(2)} cards / yr
-                      </span>
-                    </div>
+                  <div className="w-full pt-4 border-t border-slate-800 text-center">
+                    <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Estimated Mass</span>
+                    <span className="text-sm font-black text-slate-200 block mt-0.5">
+                      ~{totalMassMicrograms.toFixed(2)} μg / week
+                    </span>
+                    <span className="text-[9px] text-slate-500 block mt-1">
+                      Food-specific particle size, spherical shape, and 0.98 g/mL density assumption
+                    </span>
                   </div>
 
                   {/* Diagnosis message */}
@@ -577,6 +540,7 @@ export default function App() {
                       <th className="px-4 py-3 text-right">Concentration</th>
                       <th className="px-4 py-3 text-right">Weekly Intake</th>
                       <th className="px-4 py-3 text-right">Weekly Exposure (p/w)</th>
+                      <th className="px-4 py-3 text-right">Mass (μg/w)</th>
                       <th className="px-4 py-3 text-right">Share (%)</th>
                     </tr>
                   </thead>
@@ -597,6 +561,9 @@ export default function App() {
                           </td>
                           <td className="px-4 py-3 text-right font-mono font-bold text-amber-600">
                             {item.exposure.toFixed(2)}
+                          </td>
+                          <td className="px-4 py-3 text-right font-mono text-slate-600">
+                            {item.massMicrograms.toFixed(2)}
                           </td>
                           <td className="px-4 py-3 text-right font-mono text-slate-400 text-[10px]">
                             {item.percentage.toFixed(1)}%
@@ -639,8 +606,7 @@ export default function App() {
             <div className="col-span-1 md:col-span-12">
               <ExposureChatbot
                 totalExposure={totalExposure}
-                plasticWeightMg={plasticWeightMg}
-                creditCardFraction={creditCardFraction}
+                totalMassMicrograms={totalMassMicrograms}
                 worstFood={worstFood}
                 results={results}
               />
@@ -680,7 +646,7 @@ export default function App() {
             </p>
           </div>
           <p className="text-[11px] text-slate-500 leading-normal pl-3.5">
-            💡 This calculator simulator is built upon empirical contamination datasets (<code className="bg-slate-100 px-1 py-0.5 rounded font-mono text-slate-600 text-[10px]">MP_CONCENTRATION</code>) and exposure assessment formulas published by the research team above.
+            💡 This calculator uses the deterministic arithmetic-mean concentrations, KNHANES mean intakes, and particle-size-based mass equation reported by the research team. It estimates dietary exposure, not health risk.
           </p>
         </div>
 
@@ -691,7 +657,7 @@ export default function App() {
         
         <div className="flex items-center justify-center space-x-1 bg-slate-100 w-fit mx-auto px-2 py-1 rounded text-[10px] text-slate-500 border border-slate-200/50">
           <Database className="w-3 h-3" />
-          <span>Bento Grid Theme Enabled | Secure Offline-Ready Application</span>
+          <span>Bento Grid Theme Enabled | Chat features require an internet connection and Gemini API key</span>
         </div>
       </footer>
     </div>

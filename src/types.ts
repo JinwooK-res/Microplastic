@@ -6,8 +6,12 @@
 export interface FoodConfig {
   name_kr: string;
   name_en: string;
-  value: number; // Concentration value
+  value: number; // Deterministic arithmetic-mean concentration
   unit: "p/g" | "p/L"; // Particles per gram or particles per Liter
+  medianValue: number;
+  particleSizeGeomeanUm: number;
+  sourceStatistic: "arithmetic mean";
+  sourceTable: "Table S14";
   description: string;
   description_en: string;
   defaultVal: number;
@@ -24,7 +28,9 @@ export type FoodKey =
   | "seaweed" 
   | "honey" 
   | "beer" 
-  | "beverage";
+  | "soft_drink"
+  | "fruit_drink"
+  | "bottled_tea";
 
 export interface UserIntakes {
   salt: number;
@@ -34,7 +40,9 @@ export interface UserIntakes {
   seaweed: number;
   honey: number;
   beer: number;
-  beverage: number;
+  soft_drink: number;
+  fruit_drink: number;
+  bottled_tea: number;
 }
 
 export interface ExposureResult {
@@ -46,5 +54,7 @@ export interface ExposureResult {
   concentration: number;
   concentrationUnit: "p/g" | "p/L";
   exposure: number;
+  averageParticleMassMicrograms: number;
+  massMicrograms: number;
   percentage: number;
 }

@@ -1,115 +1,93 @@
-# Weekly Microplastics Exposure Calculator & Bento Dashboard 🔬
+# Weekly Microplastics Exposure Calculator
 
-An interactive dietary microplastics exposure assessment tool and analytical dashboard built with **React**, **Tailwind CSS**, **Streamlit (Python)**, and **Google Gemini 3.8 Flash**.
+An interactive dietary microplastics **exposure** calculator based on the deterministic parameters reported by Pham et al. (2023). The project includes a React dashboard, a Streamlit companion, and an optional Gemini-powered exposure explainer.
 
-Based on empirical data and exposure modeling from the peer-reviewed study:
-> **Pham, D. T., Kim, J., Lee, S.-H., Kim, J., Kim, D., Hong, S., Jung, J., & Kwon, J.-H. (2023).**  
-> *"Analysis of microplastics in various foods and assessment of aggregate human exposure via food consumption in Korea."*  
-> **Environmental Pollution**, 322, 121153. [https://doi.org/10.1016/j.envpol.2023.121153](https://doi.org/10.1016/j.envpol.2023.121153)
+> Pham, D. T., Kim, J., Lee, S.-H., Kim, J., Kim, D., Hong, S., Jung, J., & Kwon, J.-H. (2023). Analysis of microplastics in various foods and assessment of aggregate human exposure via food consumption in Korea. *Environmental Pollution*, 322, 121153. https://doi.org/10.1016/j.envpol.2023.121153
 
----
+## Scientific scope
 
-## 🌟 Key Features
+The default inputs reproduce the deterministic parameters for the ten calculation categories derived from the study's eight measured food types. Concentrations use the arithmetic means in Supplementary Table S14; liquid concentrations are expressed per liter and liquid intakes per liter.
 
-1. **Bento Grid Analytical Dashboard**:
-   - Modern, high-density Bento Grid interface with dark and light card archetypes.
-   - Interactive sliders and numeric inputs calibrated for solid foods (grams, $g$) and liquid foods (liters, $L$).
-   - Real-time exposure calculations using standard matrix multiplication:
-     $$\text{Weekly Exposure (particles)} = \sum (\text{Concentration}_i \times \text{Intake}_i)$$
+| Category | Concentration | Mean weekly intake | Geometric-mean particle size |
+| --- | ---: | ---: | ---: |
+| Salt | 0.512 p/g | 17.2 g | 58.04 μm |
+| Soy sauce | 36.0 p/L | 0.0451 L | 76.88 μm |
+| Fish sauce | 0.95 p/g | 1.14 g | 111.04 μm |
+| Salted seafood | 5.30 p/g | 1.26 g | 103.98 μm |
+| Seaweed | 4.51 p/g | 5.43 g | 121.30 μm |
+| Beer | 11.4 p/L | 0.445 L | 99.98 μm |
+| Soft drinks | 2.50 p/L | 0.356 L | 82.09 μm |
+| Fruit drinks | 37.30 p/L | 0.183 L | 73.92 μm |
+| Bottled tea | 0.25 p/L | 0.147 L | 101.68 μm |
+| Honey | 0.25 p/g | 2.50 g | 72.27 μm |
 
-2. **Empirical Food Concentrations ($MP\_CONCENTRATION$)**:
-   - **Table Salt**: $0.29 \text{ particles/g}$
-   - **Soy Sauce**: $0.09 \text{ particles/mL}$ ($90 \text{ particles/L}$)
-   - **Fish Sauce**: $0.63 \text{ particles/mL}$ ($630 \text{ particles/L}$)
-   - **Salted Fermented Seafood**: $0.21 \text{ particles/g}$
-   - **Seaweed (Wakame/Kelp)**: $4.47 \text{ particles/g}$
-   - **Natural Honey**: $0.18 \text{ particles/g}$
-   - **Beer**: $0.01 \text{ particles/mL}$ ($10 \text{ particles/L}$)
-   - **Bottled Soft Drinks & Beverages**: $0.004 \text{ particles/mL}$ ($4 \text{ particles/L}$)
+Particle exposure is calculated as:
 
-3. **Risk Contextualization**:
-   - Compares total ingested particles to estimated mass ($\approx 0.002\text{ mg}$ per particle).
-   - Provides objective perspectives comparing empirical findings with sensationalized media claims (such as "eating a credit card per week").
-
-4. **AI Exposure Explainer Chatbot (Gemini 3.8 Flash)**:
-   - Evaluates user-specific numbers in real-time.
-   - Answers questions regarding toxicology, particle size distributions (PE, PP, PET under $300\mu\text{m}$), and kitchen preparation reduction methods.
-
-5. **Standalone Streamlit Python MVP (`app.py`)**:
-   - Embedded exportable Python script ready for single-file local deployment with Streamlit and Matplotlib.
-
----
-
-## 🚀 Running the Web Application (React + Node.js)
-
-### Prerequisites
-- Node.js 18+ or 20+
-- npm
-
-### Installation
-```bash
-# Clone repository
-git clone https://github.com/your-username/microplastics-exposure-calculator.git
-cd microplastics-exposure-calculator
-
-# Install dependencies
-npm install
+```text
+particles/week = concentration × weekly intake
 ```
 
-### Environment Variables
-Create a `.env` file (see `.env.example`):
-```env
-GEMINI_API_KEY="your-gemini-api-key"
+Mass is calculated separately for each category using Equation 2 of the paper:
+
+```text
+AMM (g/particle) = π × L³ × ρ / (6 × 10¹²)
+mass/week = particles/week × AMM
 ```
 
-### Run Development Server
+where `L` is the category-specific geometric-mean particle size in μm and `ρ = 0.98 g/mL`. The earlier universal `0.002 mg/particle` and credit-card conversion have been removed.
+
+The default measured-food subtotal is approximately **56.13 particles/week** and **32.71 μg/week**. It must not be directly compared with the paper's 13-category aggregate result, which additionally includes fish, shellfish, and water.
+
+> This application estimates dietary exposure under study-specific assumptions. It does not establish an individual health risk, causal health effect, or safe/harmful threshold.
+
+## Run the React application
+
+Requirements: Node.js 20+ and npm.
+
 ```bash
+git clone https://github.com/JinwooK-res/Microplastic.git
+cd Microplastic
+npm ci
+cp .env.example .env
 npm run dev
 ```
-Open your browser at `http://localhost:3000`.
 
----
+Open `http://localhost:3000`.
 
-## 🐍 Running the Python Streamlit Version (`app.py`)
+Set a valid API key in `.env` to enable chat:
 
-A standalone Python Streamlit app is included. You can run it directly:
+```env
+GEMINI_API_KEY="your-gemini-api-key"
+GEMINI_MODEL="gemini-3.6-flash"
+```
+
+The calculator works without Gemini; chat does not.
+
+## Run the Streamlit companion
 
 ```bash
-# Install Python dependencies
-pip install streamlit pandas matplotlib
-
-# Run the Streamlit application
+python -m pip install streamlit pandas
 streamlit run app.py
 ```
 
-Or view and copy the complete Python source code directly from the **Streamlit Python Code** tab in the web dashboard!
+## Quality checks
 
----
-
-## 💡 Practical Microplastic Reduction Tips
-
-- **Rinse Dried Seaweed**: Rinsing dried wakame or kelp 2 to 3 times thoroughly under running tap water eliminates **70% to 84%** of attached microplastics.
-- **Choose Purified Salt**: Well-filtered vacuum-evaporated table salt or deep rock salt generally exhibits lower particle counts than open-air unrefined sea salt.
-- **Glass & Stainless Steel Storage**: Avoid microwaving or storing hot, oily, or acidic sauces in single-use plastic containers.
-- **Tap Water Filtration**: Using carbon block or reverse osmosis filters significantly reduces tap and beverage microplastic loads.
-
----
-
-## 📄 Academic Reference
-```bibtex
-@article{pham2023analysis,
-  title={Analysis of microplastics in various foods and assessment of aggregate human exposure via food consumption in Korea},
-  author={Pham, Dat Thanh and Kim, Jinwoo and Lee, Sang-Hwa and Kim, Juyang and Kim, Dowoon and Hong, Soonki and Jung, Jaehak and Kwon, Jung-Hwan},
-  journal={Environmental Pollution},
-  volume={322},
-  pages={121153},
-  year={2023},
-  publisher={Elsevier},
-  doi={10.1016/j.envpol.2023.121153}
-}
+```bash
+npm run lint
+npm test
+npm run build
 ```
 
----
+The calculation tests cover the paper's particle-mass equation, the default deterministic subtotal, and zero-intake behavior.
 
-## 🛡️ License
-MIT License. Created for environmental health awareness and scientific education.
+## Limitations
+
+- The deterministic mode uses group-level arithmetic means and mean food intakes, not individual measurements.
+- The spherical-particle and uniform-density assumptions introduce uncertainty.
+- Preparation and cooking may change particle abundance.
+- The measured-food subtotal excludes fish, shellfish, water, inhalation, and other exposure routes.
+- The chatbot explains the calculator; it is not a medical or toxicological decision system.
+
+## License
+
+Apache License 2.0. See [LICENSE](LICENSE).
